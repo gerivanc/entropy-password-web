@@ -4,97 +4,323 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EntroPy Password Generator - Web Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #0080ff;
+            --accent-color: #ff0080;
+            --success-color: #00ff80;
+            --warning-color: #ffaa00;
+            --dark-bg: #0a0a14;
+            --darker-bg: #050510;
+            --card-bg: rgba(15, 25, 35, 0.7);
+            --card-border: rgba(0, 255, 255, 0.3);
+            --text-color: #e0f0ff;
+            --text-muted: #a0b0c0;
+            --neon-green: #00BFFF;
+            --neon-green-dark: #1E90FF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Exo 2', sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 100, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(0, 50, 100, 0.1) 0%, transparent 50%);
+            color: var(--text-color);
+            min-height: 100vh;
         }
+        
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.2);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
         }
+        
         h1, h2, h3 {
-            color: #2c3e50;
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
         }
+        
         h1 {
             text-align: center;
-            font-size: 2.5em;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
+        
         h2 {
-            font-size: 1.8em;
-            margin-top: 20px;
+            font-size: 2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            font-weight: 500;
         }
+        
         h3 {
-            font-size: 1.4em;
-            margin-top: 15px;
+            font-size: 1.6em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 500;
         }
+        
+        h4 {
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+        }
+        
         p {
-            margin: 10px 0;
+            margin: 15px 0;
+            color: var(--text-color);
         }
+        
         a {
-            color: #2980b9;
+            color: var(--primary-color);
             text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
         }
+        
         a:hover {
-            text-decoration: underline;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
         }
+        
         .badges, .links, .support {
             text-align: center;
-            margin: 20px 0;
+            margin: 30px 0;
         }
+        
         .badges img, .links a {
             margin: 0 10px;
+            transition: transform 0.3s;
         }
+        
+        .badges img:hover, .links a:hover {
+            transform: translateY(-2px);
+        }
+        
         iframe {
             width: 100%;
             height: 600px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--card-border);
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 25px 0;
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
         }
+        
         .note {
-            background: #e8f4f8;
-            padding: 10px;
-            border-left: 4px solid #2980b9;
-            margin: 10px 0;
+            background: rgba(0, 100, 255, 0.1);
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
         }
+        
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 25px 0;
+            border: 1px solid rgba(0, 255, 255, 0.2);
         }
+        
         .table th, .table td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 12px;
             text-align: left;
         }
+        
         .table th {
-            background: #2c3e50;
-            color: #fff;
+            background: rgba(0, 100, 255, 0.2);
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
         }
+        
+        .table tr:nth-child(even) {
+            background-color: rgba(0, 50, 100, 0.1);
+        }
+        
+        .table tr:hover {
+            background-color: rgba(0, 150, 255, 0.1);
+        }
+        
         ul {
-            padding-left: 20px;
+            padding-left: 25px;
+            margin: 15px 0;
         }
+        
+        li {
+            margin: 8px 0;
+            color: var(--text-muted);
+        }
+        
         .security-classification {
-            margin: 20px 0;
+            margin: 25px 0;
         }
+        
         .security-classification li {
-            margin: 5px 0;
+            margin: 8px 0;
+            padding-left: 10px;
         }
+        
         .center {
             text-align: center;
+        }
+        
+        pre {
+            background: rgba(10, 20, 30, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+        }
+        
+        code {
+            background: rgba(0, 100, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* Botões e links especiais */
+        .links a, .support a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 8px 16px;
+            background: rgba(0, 191, 255, 0.1);
+            border: 1px solid var(--neon-green);
+            border-radius: 5px;
+            transition: all 0.3s;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .links a:hover, .support a:hover {
+            background: rgba(0, 191, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .center a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-green-dark));
+            color: white;
+            border-radius: 5px;
+            font-weight: 600;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 191, 255, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .center a:hover {
+            box-shadow: 0 6px 16px rgba(0, 191, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        /* Badges personalizadas */
+        .badges a {
+            display: inline-block;
+            margin: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .badges a:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Listas com ícones */
+        ul li::marker {
+            color: var(--primary-color);
+        }
+        
+        .security-classification li::marker {
+            font-size: 1.2em;
+        }
+        
+        /* Efeitos de destaque */
+        strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* Animações sutis */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container > * {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            h2 {
+                font-size: 1.7em;
+            }
+            
+            h3 {
+                font-size: 1.4em;
+            }
+            
+            iframe {
+                height: 400px;
+            }
+            
+            .links a, .support a {
+                display: block;
+                margin: 8px auto;
+                max-width: 200px;
+            }
+        }
+        
+        /* Efeito de brilho para títulos principais */
+        .glow {
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>   
+    <div class="container">
+        <h1 class="glow">EntroPy Password Generator - Web Version</h1>
+        
         <div class="badges">
             <a href="https://github.com/gerivanc/entropy-password-generator/blob/main/LICENSE.md">
                 <img src="https://img.shields.io/badge/License-MIT-FFC107?style=flat&logo=mit&logoColor=white" alt="MIT License">
@@ -221,9 +447,9 @@ entropy-password-web/
 
         <h3>🔗 Important Links</h3>
         <div class="links">
-            <a href="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html">🎯 Password Generator</a> •
-            <a href="https://gerivanc.github.io/entropy-password-web/web/readme.html">📖 Interactive Docs</a> •
-            <a href="https://github.com/gerivanc/entropy-password-web">📁 Source Code</a> •
+            <a href="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html">🎯 Password Generator</a>
+            <a href="https://gerivanc.github.io/entropy-password-web/web/readme.html">📖 Interactive Docs</a>
+            <a href="https://github.com/gerivanc/entropy-password-web">📁 Source Code</a>
             <a href="https://github.com/gerivanc/entropy-password-generator">🐍 Python Original</a>
         </div>
 
@@ -295,8 +521,8 @@ entropy-password-web/
         <div class="support">
             <h2>📧 Support and Contributions</h2>
             <p>Found an issue? Have a suggestion?</p>
-            <a href="https://github.com/gerivanc/entropy-password-generator/issues">🐛 Report Issue</a> •
-            <a href="https://github.com/gerivanc/entropy-password-generator/blob/main/.github/ISSUE_TEMPLATE/bug_report.md">💡 Bug Report</a> •
+            <a href="https://github.com/gerivanc/entropy-password-generator/issues">🐛 Report Issue</a>
+            <a href="https://github.com/gerivanc/entropy-password-generator/blob/main/.github/ISSUE_TEMPLATE/bug_report.md">💡 Bug Report</a>
             <a href="https://github.com/gerivanc/entropy-password-generator/blob/main/CONTRIBUTING.md">🤝 Contribute</a>
         </div>
 
