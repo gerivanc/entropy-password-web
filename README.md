@@ -8,7 +8,6 @@
 [![GitHub Pages](https://img.shields.io/badge/Hosted-GitHub%20Pages-2088FF?style=flat&logo=github&logoColor=white)](https://gerivanc.github.io/entropy-password-web/)
 [![Made with Python](https://img.shields.io/badge/Made%20with-Python-3572A5?style=flat&logo=python&logoColor=white)](https://python.org)
 [![Entropy Compliant](https://img.shields.io/badge/Entropy%20Compliant-Proton%20%26%20NIST-239120?style=flat&logo=security&logoColor=white)](https://proton.me/blog/what-is-password-entropy)
-![Profile Views](https://komarev.com/ghpvc/?username=entropy-password-web&style=flat-square)
 
 </div>
 
