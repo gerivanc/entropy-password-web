@@ -5,7 +5,7 @@
 ---
 
 [![MIT License](https://img.shields.io/badge/License-MIT-FFC107?style=flat&logo=mit&logoColor=white)](https://github.com/gerivanc/entropy-password-generator/blob/main/LICENSE.md)
-[![GitHub Pages](https://img.shields.io/badge/Hosted-GitHub%20Pages-2088FF?style=flat&logo=github&logoColor=white)](https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html)
+[![GitHub Pages](https://img.shields.io/badge/Hosted-GitHub%20Pages-2088FF?style=flat&logo=github&logoColor=white)](https://gerivanc.github.io/entropy-password-web/)
 [![Made with Python](https://img.shields.io/badge/Made%20with-Python-3572A5?style=flat&logo=python&logoColor=white)](https://python.org)
 [![Entropy Compliant](https://img.shields.io/badge/Entropy%20Compliant-Proton%20%26%20NIST-239120?style=flat&logo=security&logoColor=white)](https://proton.me/blog/what-is-password-entropy)
 
