@@ -195,4 +195,4 @@ Found an issue? Have a suggestion?
 ---
 
 ####
-EntroPy Password Generator © 2025 - Gerivan Costa dos Santos
+EntroPy Password Generator - Web Version © 2025 - Gerivan Costa dos Santos
