@@ -32,9 +32,11 @@ Experience the EntroPy Password Generator directly in your browser! The web vers
 
 ### 🔧 Interactive Demo
 
-<iframe src="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html" width="100%" height="600" frameborder="0" title="EntroPy Password Generator Web Interface" style="border: 1px solid #ddd; border-radius: 8px;"></iframe>
+<div align="center">
 
-> **💡 Note:** For the full interactive experience, visit: [https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html](https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html)
+[**📚 Interactive Readme**](https://gerivanc.github.io/entropy-password-web/web/readme.html)
+
+</div>
 
 ---
 
