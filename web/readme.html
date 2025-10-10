@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +32,7 @@
             font-family: 'Exo 2', sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             background-color: var(--dark-bg);
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(0, 100, 255, 0.1) 0%, transparent 20%),
@@ -43,12 +43,13 @@
         }
         
         .container {
+            width: 100%;
             max-width: 1000px;
             margin: 0 auto;
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 150, 255, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
             border: 1px solid var(--card-border);
             backdrop-filter: blur(10px);
         }
@@ -61,40 +62,41 @@
         
         h1 {
             text-align: center;
-            font-size: 2.8em;
-            margin-bottom: 20px;
+            font-size: 1.8em;
+            margin-bottom: 15px;
             font-weight: 700;
             letter-spacing: 1px;
         }
         
         h2 {
-            font-size: 2em;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             font-weight: 500;
         }
         
         h3 {
-            font-size: 1.6em;
-            margin-top: 25px;
-            margin-bottom: 12px;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
             font-weight: 500;
         }
         
         h4 {
-            font-size: 1.3em;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 8px;
             color: var(--secondary-color);
             font-family: 'Orbitron', sans-serif;
             font-weight: 500;
         }
         
         p {
-            margin: 15px 0;
+            margin: 12px 0;
             color: var(--text-color);
+            font-size: 0.95em;
         }
         
         a {
@@ -110,46 +112,64 @@
         
         .badges, .links, .support {
             text-align: center;
-            margin: 30px 0;
+            margin: 25px 0;
         }
         
-        .badges img, .links a {
-            margin: 0 10px;
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .badges a {
+            margin: 0 5px;
             transition: transform 0.3s;
+            display: inline-block;
         }
         
-        .badges img:hover, .links a:hover {
+        .badges img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .badges a:hover, .links a:hover {
             transform: translateY(-2px);
         }
         
         iframe {
             width: 100%;
-            height: 600px;
+            height: 400px;
             border: 1px solid var(--card-border);
             border-radius: 8px;
-            margin: 25px 0;
-            box-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 100, 255, 0.2);
         }
         
         .note {
             background: rgba(0, 100, 255, 0.1);
-            padding: 15px;
+            padding: 12px;
             border-left: 4px solid var(--primary-color);
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9em;
         }
         
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin: 25px 0;
+            margin: 20px 0;
             border: 1px solid rgba(0, 255, 255, 0.2);
+            font-size: 0.85em;
+            overflow-x: auto;
+            display: block;
         }
         
         .table th, .table td {
             border: 1px solid rgba(0, 255, 255, 0.2);
-            padding: 12px;
+            padding: 10px 8px;
             text-align: left;
+            white-space: nowrap;
         }
         
         .table th {
@@ -168,22 +188,23 @@
         }
         
         ul {
-            padding-left: 25px;
-            margin: 15px 0;
+            padding-left: 20px;
+            margin: 12px 0;
         }
         
         li {
-            margin: 8px 0;
+            margin: 6px 0;
             color: var(--text-muted);
+            font-size: 0.95em;
         }
         
         .security-classification {
-            margin: 25px 0;
+            margin: 20px 0;
         }
         
         .security-classification li {
-            margin: 8px 0;
-            padding-left: 10px;
+            margin: 6px 0;
+            padding-left: 8px;
         }
         
         .center {
@@ -192,68 +213,72 @@
         
         pre {
             background: rgba(10, 20, 30, 0.7);
-            padding: 20px;
-            border-radius: 8px;
+            padding: 15px;
+            border-radius: 6px;
             overflow-x: auto;
-            margin: 20px 0;
+            margin: 15px 0;
             border: 1px solid rgba(0, 255, 255, 0.2);
             color: var(--primary-color);
             font-family: 'Courier New', monospace;
+            font-size: 0.85em;
         }
         
         code {
             background: rgba(0, 100, 255, 0.2);
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 2px 5px;
+            border-radius: 3px;
             color: var(--primary-color);
             font-family: 'Courier New', monospace;
+            font-size: 0.9em;
         }
         
         /* Botões e links especiais */
+        .links, .support {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        
         .links a, .support a {
-            display: inline-block;
-            margin: 0 8px;
-            padding: 8px 16px;
+            display: block;
+            width: 100%;
+            max-width: 250px;
+            margin: 5px 0;
+            padding: 12px 16px;
             background: rgba(0, 191, 255, 0.1);
             border: 1px solid var(--neon-green);
             border-radius: 5px;
             transition: all 0.3s;
             color: var(--primary-color);
             font-weight: 600;
+            text-align: center;
         }
         
         .links a:hover, .support a:hover {
             background: rgba(0, 191, 255, 0.2);
-            box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+            box-shadow: 0 0 12px rgba(0, 191, 255, 0.4);
             transform: translateY(-2px);
         }
         
         .center a {
             display: inline-block;
-            padding: 12px 24px;
+            padding: 14px 24px;
             background: linear-gradient(135deg, var(--neon-green), var(--neon-green-dark));
             color: white;
             border-radius: 5px;
             font-weight: 600;
-            margin: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 191, 255, 0.4);
+            margin: 12px 0;
+            box-shadow: 0 4px 10px rgba(0, 191, 255, 0.4);
             transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
         }
         
         .center a:hover {
-            box-shadow: 0 6px 16px rgba(0, 191, 255, 0.6);
+            box-shadow: 0 6px 14px rgba(0, 191, 255, 0.6);
             transform: translateY(-2px);
-        }
-        
-        /* Badges personalizadas */
-        .badges a {
-            display: inline-block;
-            margin: 8px;
-            transition: transform 0.3s;
-        }
-        
-        .badges a:hover {
-            transform: translateY(-3px);
         }
         
         /* Listas com ícones */
@@ -262,7 +287,7 @@
         }
         
         .security-classification li::marker {
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
         
         /* Efeitos de destaque */
@@ -281,39 +306,133 @@
             animation: fadeIn 0.6s ease-out;
         }
         
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .container {
+        /* Efeito de brilho para títulos principais */
+        .glow {
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+        
+        /* Melhorias para mobile */
+        .mobile-optimized {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        
+        /* Media queries para telas maiores */
+        @media (min-width: 768px) {
+            body {
                 padding: 20px;
-                margin: 10px;
+            }
+            
+            .container {
+                padding: 30px;
+                border-radius: 15px;
             }
             
             h1 {
-                font-size: 2.2em;
+                font-size: 2.8em;
+                margin-bottom: 20px;
             }
             
             h2 {
-                font-size: 1.7em;
+                font-size: 2em;
+                margin-top: 30px;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
             }
             
             h3 {
-                font-size: 1.4em;
+                font-size: 1.6em;
+                margin-top: 25px;
+                margin-bottom: 12px;
+            }
+            
+            h4 {
+                font-size: 1.3em;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            
+            p {
+                margin: 15px 0;
+                font-size: 1em;
             }
             
             iframe {
-                height: 400px;
+                height: 600px;
+                margin: 25px 0;
+            }
+            
+            .note {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .table {
+                font-size: 1em;
+                display: table;
+            }
+            
+            .table th, .table td {
+                padding: 12px;
+            }
+            
+            ul {
+                padding-left: 25px;
+                margin: 15px 0;
+            }
+            
+            li {
+                margin: 8px 0;
+                font-size: 1em;
+            }
+            
+            .security-classification li {
+                margin: 8px 0;
+                padding-left: 10px;
+            }
+            
+            pre {
+                padding: 20px;
+                margin: 20px 0;
+                font-size: 1em;
+            }
+            
+            .links, .support {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
             }
             
             .links a, .support a {
-                display: block;
-                margin: 8px auto;
-                max-width: 200px;
+                width: auto;
+                margin: 0 8px;
+            }
+            
+            .center a {
+                width: auto;
+                padding: 12px 24px;
+            }
+            
+            .badges {
+                gap: 10px;
+            }
+            
+            .badges a {
+                margin: 0 10px;
             }
         }
         
-        /* Efeito de brilho para títulos principais */
-        .glow {
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1000px;
+            }
         }
     </style>
 </head>
@@ -339,7 +458,7 @@
             </a>
         </div>
 
-        <p>This EntroPy Password Generator project - Web Version, derives from the original project <a href="https://github.com/gerivanc/entropy-password-generator/">EntroPy Password Generator</a>, is a secure and customizable password generator developed in Python, enabling users to generate strong passwords. It creates robust passwords with configurable character sets and calculates their entropy to evaluate strength. The project provides 20+ modes for secure password generation, ranging from 15 to 128 characters, with entropies between 97.62 bits and 833.00 bits, exceeding the Proton© recommended minimum of 75 bits and the cryptographic strength best practices outlined in NIST SP 800-63B and NIST SP 800-132.</p>
+        <p class="mobile-optimized">This EntroPy Password Generator project - Web Version, derives from the original project <a href="https://github.com/gerivanc/entropy-password-generator/">EntroPy Password Generator</a>, is a secure and customizable password generator developed in Python, enabling users to generate strong passwords. It creates robust passwords with configurable character sets and calculates their entropy to evaluate strength. The project provides 20+ modes for secure password generation, ranging from 15 to 128 characters, with entropies between 97.62 bits and 833.00 bits, exceeding the Proton© recommended minimum of 75 bits and the cryptographic strength best practices outlined in NIST SP 800-63B and NIST SP 800-132.</p>
 
         <h2>🌐 Interactive Web Version</h2>
         <p>Experience the EntroPy Password Generator directly in your browser! The web version offers all the functionality of the Python script in an intuitive and responsive interface.</p>
@@ -422,7 +541,7 @@
         </ol>
 
         <h2>📊 Example Output</h2>
-        <p><strong>Generated Password:</strong> ~e5gV*GyX@4YwGn&AFN?{3>,2gt{zNzCa%~:Uz!G</p>
+        <p><strong>Generated Password:</strong> <code class="mobile-optimized">~e5gV*GyX@4YwGn&AFN?{3>,2gt{zNzCa%~:Uz!G</code></p>
         <p><strong>Length:</strong> 40 characters</p>
         <p><strong>Entropy:</strong> 253.59 bits</p>
         <p><strong>Mode:</strong> Block III (Custom)</p>
@@ -437,7 +556,7 @@
         </ul>
 
         <h2>🗂️ Web Project Structure</h2>
-        <pre>
+        <pre class="mobile-optimized">
 entropy-password-web/
 ├── web/
 │   └── entropy-password-generator.html # 🎯 Main interface
@@ -476,38 +595,40 @@ entropy-password-web/
         </ul>
 
         <h2>🆚 Comparison: Web vs Python</h2>
-        <table class="table">
-            <tr>
-                <th>Feature</th>
-                <th>Web Version</th>
-                <th>Python Version</th>
-            </tr>
-            <tr>
-                <td><strong>Interface</strong></td>
-                <td>🎨 Graphical & Intuitive</td>
-                <td>⌨️ Command Line</td>
-            </tr>
-            <tr>
-                <td><strong>Accessibility</strong></td>
-                <td>🌐 Browser</td>
-                <td>🐍 Python 3.8+</td>
-            </tr>
-            <tr>
-                <td><strong>Configuration</strong></td>
-                <td>🖱️ Clicks</td>
-                <td>🏃‍♂️ Arguments</td>
-            </tr>
-            <tr>
-                <td><strong>Results</strong></td>
-                <td>📊 Visual</td>
-                <td>📝 Text</td>
-            </tr>
-            <tr>
-                <td><strong>Portability</strong></td>
-                <td>📱 Multi-device</td>
-                <td>💻 Local</td>
-            </tr>
-        </table>
+        <div class="table-container">
+            <table class="table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Web Version</th>
+                    <th>Python Version</th>
+                </tr>
+                <tr>
+                    <td><strong>Interface</strong></td>
+                    <td>🎨 Graphical & Intuitive</td>
+                    <td>⌨️ Command Line</td>
+                </tr>
+                <tr>
+                    <td><strong>Accessibility</strong></td>
+                    <td>🌐 Browser</td>
+                    <td>🐍 Python 3.8+</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration</strong></td>
+                    <td>🖱️ Clicks</td>
+                    <td>🏃‍♂️ Arguments</td>
+                </tr>
+                <tr>
+                    <td><strong>Results</strong></td>
+                    <td>📊 Visual</td>
+                    <td>📝 Text</td>
+                </tr>
+                <tr>
+                    <td><strong>Portability</strong></td>
+                    <td>📱 Multi-device</td>
+                    <td>💻 Local</td>
+                </tr>
+            </table>
+        </div>
 
         <h2>🔄 Integration with Python Project</h2>
         <p>The web version maintains <strong>100% compatibility</strong> with the original Python project:</p>
