@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,6 +40,8 @@
                 radial-gradient(circle at 50% 50%, rgba(0, 50, 100, 0.1) 0%, transparent 50%);
             color: var(--text-color);
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
         
         .container {
@@ -52,6 +54,8 @@
             box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
             border: 1px solid var(--card-border);
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
         }
         
         h1, h2, h3 {
@@ -232,7 +236,7 @@
             font-size: 0.9em;
         }
         
-        /* Botões e links especiais */
+        /* Special buttons and links */
         .links, .support {
             display: flex;
             flex-direction: column;
@@ -281,7 +285,7 @@
             transform: translateY(-2px);
         }
         
-        /* Listas com ícones */
+        /* Lists with icons */
         ul li::marker {
             color: var(--primary-color);
         }
@@ -290,13 +294,13 @@
             font-size: 1.1em;
         }
         
-        /* Efeitos de destaque */
+        /* Highlight effects */
         strong {
             color: var(--primary-color);
             font-weight: 600;
         }
         
-        /* Animações sutis */
+        /* Subtle animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -306,12 +310,12 @@
             animation: fadeIn 0.6s ease-out;
         }
         
-        /* Efeito de brilho para títulos principais */
+        /* Glow effect for main titles */
         .glow {
             text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
         }
         
-        /* Melhorias para mobile */
+        /* Mobile improvements */
         .mobile-optimized {
             overflow-wrap: break-word;
             word-wrap: break-word;
@@ -324,7 +328,47 @@
             border: 1px solid rgba(0, 255, 255, 0.2);
         }
         
-        /* Media queries para telas maiores */
+        /* Glass box for mobile text justification */
+        .intro-text {
+            background: rgba(0, 100, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            margin: 15px 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Binary rain animation */
+        .binary-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .binary-digit {
+            position: absolute;
+            color: rgba(0, 255, 255, 0.3);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            user-select: none;
+            animation: floatUp linear infinite;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh);
+            }
+            100% {
+                transform: translateY(-100px);
+            }
+        }
+        
+        /* Media queries for larger screens */
         @media (min-width: 768px) {
             body {
                 padding: 20px;
@@ -427,6 +471,18 @@
             .badges a {
                 margin: 0 10px;
             }
+            
+            /* Remove text justification on desktop */
+            .intro-text {
+                text-align: left;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            /* Text justification for mobile */
+            .intro-text {
+                text-align: justify;
+            }
         }
         
         @media (min-width: 1024px) {
@@ -437,6 +493,9 @@
     </style>
 </head>
 <body>   
+    <!-- Binary rain effect -->
+    <div class="binary-rain" id="binaryRain"></div>
+    
     <div class="container">
         <h1 class="glow">EntroPy Password Generator - Web Version</h1>
         
@@ -458,7 +517,9 @@
             </a>
         </div>
 
-        <p class="mobile-optimized">This EntroPy Password Generator project - Web Version, derives from the original project <a href="https://github.com/gerivanc/entropy-password-generator/">EntroPy Password Generator</a>, is a secure and customizable password generator developed in Python, enabling users to generate strong passwords. It creates robust passwords with configurable character sets and calculates their entropy to evaluate strength. The project provides 20+ modes for secure password generation, ranging from 15 to 128 characters, with entropies between 97.62 bits and 833.00 bits, exceeding the Proton© recommended minimum of 75 bits and the cryptographic strength best practices outlined in NIST SP 800-63B and NIST SP 800-132.</p>
+        <div class="intro-text">
+            <p>This EntroPy Password Generator project - Web Version, derives from the original project <a href="https://github.com/gerivanc/entropy-password-generator/">EntroPy Password Generator</a>, is a secure and customizable password generator developed in Python, enabling users to generate strong passwords. It creates robust passwords with configurable character sets and calculates their entropy to evaluate strength. The project provides 20+ modes for secure password generation, ranging from 15 to 128 characters, with entropies between 97.62 bits and 833.00 bits, exceeding the Proton© recommended minimum of 75 bits and the cryptographic strength best practices outlined in NIST SP 800-63B and NIST SP 800-132.</p>
+        </div>
 
         <h2>🌐 Interactive Web Version</h2>
         <p>Experience the EntroPy Password Generator directly in your browser! The web version offers all the functionality of the Python script in an intuitive and responsive interface.</p>
@@ -559,10 +620,17 @@
         <h2>🗂️ Web Project Structure</h2>
         <pre class="mobile-optimized">
 entropy-password-web/
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   └── config.yml
+│   └── workflows/
+│       └── static.yml
 ├── web/
-│   └── entropy-password-generator.html # 🎯 Main interface
-├── README.md # 📖 This file
-└── github-pages-config/ # ⚙️ GitHub Pages configuration
+│   ├── entropy-password-generator.html
+│   └── readme.html
+├── LICENSE
+├── README.md
+└── SECURITY.md
         </pre>
 
         <h3>🔗 Important Links</h3>
@@ -669,24 +737,59 @@ entropy-password-web/
             ">"Code with purpose. Build with passion. Share with the world."</p>
         </div>
 
-        <!-- Copyright footer styles - English language -->
+        <!-- Copyright footer styles -->
         <style>
         .center p {
             margin: 2px 0;
             line-height: 1.2;
-            color: cyan; /* Cyan color for copyright text */
-            transition: color 0.3s ease; /* Smooth transition effect */
+            color: cyan;
+            transition: color 0.3s ease;
         }
         .center p:hover {
-            color: #00B7EB; /* Darker cyan on hover - English version */
+            color: #00B7EB;
         }
         </style>
 
-        <!-- Copyright footer - English language -->
+        <!-- Copyright footer -->
         <div class="center">          
             <p><strong>Copyright © 2025 Gerivan Costa dos Santos</strong></p>
             <p><strong>EntroPy Password Generator Web Version © 2025</strong></p>
         </div>
-    </div> <!-- Close container div - English version -->
+    </div>
+
+    <script>
+        // Binary rain animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const binaryRain = document.getElementById('binaryRain');
+            const digits = ['0', '1'];
+            const digitCount = 100;
+            
+            for (let i = 0; i < digitCount; i++) {
+                const digit = document.createElement('div');
+                digit.className = 'binary-digit';
+                digit.textContent = digits[Math.floor(Math.random() * digits.length)];
+                
+                // Random position
+                const left = Math.random() * 100;
+                digit.style.left = `${left}%`;
+                
+                // Random animation duration and delay
+                const duration = 10 + Math.random() * 20;
+                const delay = Math.random() * 5;
+                digit.style.animationDuration = `${duration}s`;
+                digit.style.animationDelay = `${delay}s`;
+                
+                // Random font size
+                const fontSize = 10 + Math.random() * 10;
+                digit.style.fontSize = `${fontSize}px`;
+                
+                // Random opacity
+                const opacity = 0.1 + Math.random() * 0.3;
+                digit.style.opacity = opacity;
+                
+                binaryRain.appendChild(digit);
+            }
+        });
+    </script>
 </body>
 </html>
