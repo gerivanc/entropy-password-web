@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- 🔒 New: Content Security Policy -->
+	<meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline'; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                   font-src 'self' https://fonts.gstatic.com;
+                   img-src 'self' https://img.shields.io data:;
+                   frame-src 'self' https://gerivanc.github.io;
+                   connect-src 'none';">
+    <!-- 🔒 NEW: Additional Security Headers-->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="noindex, nofollow">
+    
     <title>EntroPy Password Generator - Web Version</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
+	<style>
         :root {
             --primary-color: #00ffff;
             --secondary-color: #0080ff;
@@ -790,6 +805,46 @@ entropy-password-web/
                 binaryRain.appendChild(digit);
             }
         });
+		
+		// 🔒 Sanitization and Safety Functions
+			function sanitizeHTML(input) {
+				if (typeof input !== 'string') return '';
+				
+				const div = document.createElement('div');
+				div.textContent = input;
+				return div.innerHTML;
+			}
+
+			function validatePasswordLength(length) {
+				const minLength = 15;
+				const maxLength = 128;
+				
+				if (length < minLength || length > maxLength) {
+					throw new Error(`Size must be between ${minLength} e ${maxLength} characters`);
+				}
+				return Math.floor(length);
+			}
+
+			function secureRandom(max) {
+				const randomBuffer = new Uint32Array(1);
+				window.crypto.getRandomValues(randomBuffer);
+				return randomBuffer[0] % max;
+			}
+
+			function detectDevTools() {
+				const threshold = 160;
+				const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+				const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        
+				if (widthThreshold || heightThreshold) {
+					console.warn('Developer tools detected. Sensitive operations may be monitored.');
+					return true;
+				}
+				return false;
+			}
+
+		// Perform detection on load
+		document.addEventListener('DOMContentLoaded', detectDevTools);	
     </script>
 </body>
 </html>
