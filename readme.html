@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- === FAVICON === -->
+<link rel="icon" type="image/x-icon" href="https://gerivan.me/g3.ico">
+<link rel="icon" type="image/png" sizes="256x249" href="https://gerivan.me/g3.ico">
+<link rel="icon" type="image/png" sizes="906x807" href="https://gerivan.me/g3.png">
+<link rel="shortcut icon" href="https://gerivan.me/g3.ico">
+    
+    <!-- === 🔒 New: Content Security Policy === -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                   font-src 'self' https://fonts.gstatic.com;
+                   img-src 'self' https: data:;
+                   connect-src 'none';
+                   object-src 'none';
+                   base-uri 'self';">
+    
+    <!-- === Content Security Policy 2th === -->
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <title>EntroPy Password Generator Web Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #0080ff;
+            --accent-color: #ff0080;
+            --success-color: #00ff80;
+            --warning-color: #ffaa00;
+            --dark-bg: #0a0a14;
+            --darker-bg: #050510;
+            --card-bg: rgba(15, 25, 35, 0.7);
+            --card-border: rgba(0, 255, 255, 0.3);
+            --text-color: #e0f0ff;
+            --text-muted: #a0b0c0;
+            --neon-green: #00BFFF;
+            --neon-green-dark: #1E90FF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 15px;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 100, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(0, 50, 100, 0.1) 0%, transparent 50%);
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        h2 {
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            font-weight: 500;
+        }
+        
+        h3 {
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        h4 {
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+        }
+        
+        p {
+            margin: 12px 0;
+            color: var(--text-color);
+            font-size: 0.95em;
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        a:hover {
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+        }
+        
+        .badges, .links, .support {
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .badges a {
+            margin: 0 5px;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+        
+        .badges img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .badges a:hover, .links a:hover {
+            transform: translateY(-2px);
+        }
+        
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 100, 255, 0.2);
+        }
+        
+        .note {
+            background: rgba(0, 100, 255, 0.1);
+            padding: 12px;
+            border-left: 4px solid var(--primary-color);
+            margin: 12px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9em;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            font-size: 0.85em;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .table th, .table td {
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 10px 8px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        
+        .table th {
+            background: rgba(0, 100, 255, 0.2);
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: rgba(0, 50, 100, 0.1);
+        }
+        
+        .table tr:hover {
+            background-color: rgba(0, 150, 255, 0.1);
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin: 12px 0;
+        }
+        
+        li {
+            margin: 6px 0;
+            color: var(--text-muted);
+            font-size: 0.95em;
+        }
+        
+        .security-classification {
+            margin: 20px 0;
+        }
+        
+        .security-classification li {
+            margin: 6px 0;
+            padding-left: 8px;
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        pre {
+            background: rgba(10, 20, 30, 0.7);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        
+        code {
+            background: rgba(0, 100, 255, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        /* Special buttons and links */
+        .links, .support {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .links a, .support a {
+            display: block;
+            width: 100%;
+            max-width: 250px;
+            margin: 5px 0;
+            padding: 12px 16px;
+            background: rgba(0, 191, 255, 0.1);
+            border: 1px solid var(--neon-green);
+            border-radius: 5px;
+            transition: all 0.3s;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .links a:hover, .support a:hover {
+            background: rgba(0, 191, 255, 0.2);
+            box-shadow: 0 0 12px rgba(0, 191, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .center a {
+            display: inline-block;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-green-dark));
+            color: white;
+            border-radius: 5px;
+            font-weight: 600;
+            margin: 12px 0;
+            box-shadow: 0 4px 10px rgba(0, 191, 255, 0.4);
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .center a:hover {
+            box-shadow: 0 6px 14px rgba(0, 191, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        /* Lists with icons */
+        ul li::marker {
+            color: var(--primary-color);
+        }
+        
+        .security-classification li::marker {
+            font-size: 1.1em;
+        }
+        
+        /* Highlight effects */
+        strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* Subtle animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container > * {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        /* Glow effect for main titles */
+        .glow {
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+        
+        /* Mobile improvements */
+        .mobile-optimized {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        
+        /* Glass box for mobile text justification */
+        .intro-text {
+            background: rgba(0, 100, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            margin: 15px 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Binary rain animation */
+        .binary-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .binary-digit {
+            position: absolute;
+            color: rgba(0, 255, 255, 0.3);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            user-select: none;
+            animation: floatUp linear infinite;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh);
+            }
+            100% {
+                transform: translateY(-100px);
+            }
+        }
+        
+        /* Media queries for larger screens */
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            .container {
+                padding: 30px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 2.8em;
+                margin-bottom: 20px;
+            }
+            
+            h2 {
+                font-size: 2em;
+                margin-top: 30px;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+            
+            h3 {
+                font-size: 1.6em;
+                margin-top: 25px;
+                margin-bottom: 12px;
+            }
+            
+            h4 {
+                font-size: 1.3em;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            
+            p {
+                margin: 15px 0;
+                font-size: 1em;
+            }
+            
+            iframe {
+                height: 600px;
+                margin: 25px 0;
+            }
+            
+            .note {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .table {
+                font-size: 1em;
+                display: table;
+            }
+            
+            .table th, .table td {
+                padding: 12px;
+            }
+            
+            ul {
+                padding-left: 25px;
+                margin: 15px 0;
+            }
+            
+            li {
+                margin: 8px 0;
+                font-size: 1em;
+            }
+            
+            .security-classification li {
+                margin: 8px 0;
+                padding-left: 10px;
+            }
+            
+            pre {
+                padding: 20px;
+                margin: 20px 0;
+                font-size: 1em;
+            }
+            
+            .links, .support {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .links a, .support a {
+                width: auto;
+                margin: 0 8px;
+            }
+            
+            .center a {
+                width: auto;
+                padding: 12px 24px;
+            }
+            
+            .badges {
+                gap: 10px;
+            }
+            
+            .badges a {
+                margin: 0 10px;
+            }
+            
+            /* Remove text justification on desktop */
+            .intro-text {
+                text-align: left;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            /* Text justification for mobile */
+            .intro-text {
+                text-align: justify;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1000px;
+            }
+        }
+    </style>
+</head>
+<body>   
+    <!-- Binary rain effect -->
+    <div class="binary-rain" id="binaryRain"></div>
+    
+    <div class="container">
+        <h1 class="glow">EntroPy Password Generator Web Version</h1>
+        
+        <div class="badges">
+            <a href="https://github.com/gerivanc/entropy-password-generator/blob/main/LICENSE.md">
+                <img src="https://img.shields.io/badge/License-MIT-FFC107?style=flat&logo=mit&logoColor=white" alt="	 License">
+            </a>
+            <a href="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html">
+                <img src="https://img.shields.io/badge/Generator-Interactive-2088FF?style=flat&logo=hammer&logoColor=white" alt="Password Generator">
+            </a>
+            <a href="https://gerivanc.github.io/entropy-password-web/web/readme.html">
+                <img src="https://img.shields.io/badge/Docs-Interactive-00C853?style=flat&logo=readme&logoColor=white" alt="Interactive Documentation">
+            </a>
+            <a href="https://python.org">
+                <img src="https://img.shields.io/badge/Made%20with-Python-3572A5?style=flat&logo=python&logoColor=white" alt="Made with Python">
+            </a>
+            <a href="https://proton.me/blog/what-is-password-entropy">
+                <img src="https://img.shields.io/badge/Entropy%20Compliant-Proton%20%26%20NIST-239120?style=flat&logo=security&logoColor=white" alt="Entropy Compliant">
+            </a>
+        </div>
+
+        <div class="intro-text">
+            <p>This EntroPy Password Generator project - Web Version, derives from the original project <a href="https://github.com/gerivanc/entropy-password-generator/">EntroPy Password Generator</a>, is a secure and customizable password generator developed in Python, enabling users to generate strong passwords. It creates robust passwords with configurable character sets and calculates their entropy to evaluate strength. The project provides 20+ modes for secure password generation, ranging from 15 to 128 characters, with entropies between 97.62 bits and 833.00 bits, exceeding the Proton© recommended minimum of 75 bits and the cryptographic strength best practices outlined in NIST SP 800-63B and NIST SP 800-132.</p>
+        </div>
+
+        <h2>🌐 Interactive Web Version</h2>
+        <p>Experience the EntroPy Password Generator directly in your browser! The web version offers all the functionality of the Python script in an intuitive and responsive interface.</p>
+
+        <h3>🚀 Access the Web Version</h3>
+        <div class="center">
+            <a href="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html">🌍 Try It Now on GitHub Pages</a>
+        </div>
+
+        <h3>🔧 Interactive Demo</h3>
+        <iframe src="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html" title="EntroPy Password Generator Web Interface"></iframe>
+        <div class="note">
+            <p style="margin: 0; font-size: 0.9em; color: var(--text-muted);">💡 <strong>Note:</strong> For the full interactive experience, visit | <a href="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html">Interface Web do EntroPy Password Generator</a></p>
+        </div>
+
+        <h2>✨ Web Version Features</h2>
+        <h3>🎨 Three Block Interface</h3>
+        <h4>🧩 Block I (Modes 1-10)</h4>
+        <ul>
+            <li>Fixed length of 24 characters</li>
+            <li>Includes ambiguous characters for maximum entropy</li>
+            <li>10 predefined modes with different character combinations</li>
+        </ul>
+        <h4>🌀 Block II (Modes 11-20)</h4>
+        <ul>
+            <li>Various lengths (15-128 characters)</li>
+            <li>Excludes ambiguous characters for better readability</li>
+            <li>Modes optimized for different use cases</li>
+        </ul>
+        <h4>🎯 Block III (Custom Mode)</h4>
+        <ul>
+            <li>Customizable length (15-128 characters)</li>
+            <li>Full control over character types</li>
+            <li>Option to include/exclude ambiguous characters</li>
+        </ul>
+
+        <h3>🔒 Security Features</h3>
+        <ul>
+            <li><strong>Real-time Entropy Calculation</strong>: View password strength in bits</li>
+            <li><strong>Visual Strength Indicator</strong>: Color bar showing security level</li>
+            <li><strong>Cryptographic Generation</strong>: Secure algorithm based on Python's <code>secrets</code></li>
+            <li><strong>Security Warnings</strong>: Alerts when entropy falls below 75 bits</li>
+        </ul>
+
+        <h3>📱 Responsive Interface</h3>
+        <ul>
+            <li><strong>Modern Design</strong>: Clean and professional interface</li>
+            <li><strong>Mobile-Friendly</strong>: Works perfectly on mobile devices</li>
+            <li><strong>Visual Feedback</strong>: Smooth animations and transitions</li>
+            <li><strong>Accessibility</strong>: User experience focused design</li>
+        </ul>
+
+        <h2>🛠️ How to Use the Web Version</h2>
+        <ol>
+            <li><strong>Select the Block</strong>
+                <ul>
+                    <li>Choose between <strong>Blocks I/II</strong> (predefined modes) or <strong>Block III</strong> (custom)</li>
+                </ul>
+            </li>
+            <li><strong>Configure Options</strong>
+                <ul>
+                    <li><strong>Block III</strong>: Adjust length and character types</li>
+                    <li><strong>Blocks I/II</strong>: Select one of the 20 predefined modes</li>
+                </ul>
+            </li>
+            <li><strong>Generate and Copy</strong>
+                <ul>
+                    <li>Click "Generate Password"</li>
+                    <li>Use the "Copy" button to save the password</li>
+                    <li>Check password entropy and strength</li>
+                </ul>
+            </li>
+            <li><strong>Implement Securely</strong>
+                <ul>
+                    <li>Paste the password into your password manager</li>
+                    <li><strong>Never</strong> memorize complex passwords</li>
+                    <li>Use a trusted manager like Bitwarden</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>📊 Example Output</h2>
+        <p><strong>Generated Password:</strong> <code class="mobile-optimized">Bxq>%;K|eCz#sLw`Y[3)(sLRH03viCVX2yb(.,RQ</code></p>
+        <p><strong>Length:</strong> 40 characters</p>
+        <p><strong>Ambiguous character:</strong> not chosen</p>
+        <p><strong>Entropy:</strong> 260.31 bits</p>
+        <p><strong>Mode:</strong> Block III (Custom)</p>
+
+        <h3>Security Classification:</h3>
+        <ul class="security-classification">
+            <li>🔴 <strong>Weak</strong>: &lt; 75 bits</li>
+            <li>🟡 <strong>Medium</strong>: 75-100 bits</li>
+            <li>🟢 <strong>Strong</strong>: 100-150 bits</li>
+            <li>🔵 <strong>Very Strong</strong>: 150-200 bits</li>
+            <li>🟣 <strong>Extremely Strong</strong>: &gt; 200 bits</li>
+        </ul>
+
+        <h2>🗂️ Web Project Structure</h2>
+        <pre class="mobile-optimized">
+entropy-password-web/
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   └── config.yml
+│   └── workflows/
+│       └── static.yml
+├── web/
+│   ├── entropy-password-generator.html
+│   └── readme.html
+├── LICENSE
+├── README.md
+└── SECURITY.md
+        </pre>
+
+        <h3>🔗 Important Links</h3>
+        <div class="links">
+            <a href="https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html">🎯 Password Generator</a>
+            <a href="https://gerivanc.github.io/entropy-password-web/web/readme.html">📖 Interactive Docs</a>
+            <a href="https://github.com/gerivanc/entropy-password-web">📁 Source Code</a>
+            <a href="https://github.com/gerivanc/entropy-password-generator">🐍 Python Original</a>
+        </div>
+
+        <h2>🎯 Recommended Use Cases</h2>
+        <h3>For Daily Use:</h3>
+        <ul>
+            <li><code>Mode 8</code> (151 bits) - High-security websites</li>
+            <li><code>Mode 15</code> (152 bits) - Corporate email</li>
+            <li><code>Mode 11</code> (95 bits) - Social media</li>
+        </ul>
+        <h3>For Maximum Security:</h3>
+        <ul>
+            <li><code>Mode 19</code> (475 bits) - Password manager master key</li>
+            <li><code>Mode 20</code> (811 bits) - Encryption and wallets</li>
+            <li><code>Block III Custom</code> - Specific use cases</li>
+        </ul>
+
+        <h2>⚠️ Security Warnings</h2>
+        <ul>
+            <li><strong>⚠️ DO NOT memorize passwords generated by this tool</strong></li>
+            <li><strong>✅ USE a trusted password manager</strong></li>
+            <li><strong>🔒 The only password to memorize is your vault password</strong></li>
+            <li><strong>📱 Enable two-factor authentication whenever possible</strong></li>
+        </ul>
+
+        <h2>🆚 Comparison: Web vs Python</h2>
+        <div class="table-container">
+            <table class="table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Web Version</th>
+                    <th>Python Version</th>
+                </tr>
+                <tr>
+                    <td><strong>Interface</strong></td>
+                    <td>🎨 Graphical & Intuitive</td>
+                    <td>⌨️ Command Line</td>
+                </tr>
+                <tr>
+                    <td><strong>Accessibility</strong></td>
+                    <td>🌐 Browser</td>
+                    <td>🐍 Python 3.8+</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration</strong></td>
+                    <td>🖱️ Clicks</td>
+                    <td>🏃‍♂️ Arguments</td>
+                </tr>
+                <tr>
+                    <td><strong>Results</strong></td>
+                    <td>📊 Visual</td>
+                    <td>📝 Text</td>
+                </tr>
+                <tr>
+                    <td><strong>Portability</strong></td>
+                    <td>📱 Multi-device</td>
+                    <td>💻 Local</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>🔄 Integration with Python Project</h2>
+        <p>The web version maintains <strong>100% compatibility</strong> with the original Python project:</p>
+        <ul>
+            <li><strong>Same generation</strong> algorithms</li>
+            <li><strong>Identical entropy</strong> calculation</li>
+            <li><strong>Full compatibility</strong> with 20 predefined modes</li>
+            <li><strong>Same security</strong> standards Proton© and NIST</li>
+        </ul>
+
+        <div class="support">
+            <h2>📧 Support and Contributions</h2>
+            <p>Found an issue? Have a suggestion?</p>
+            <a href="https://github.com/gerivanc/entropy-password-generator/issues">🐛 Report Issue</a>
+            <a href="https://github.com/gerivanc/entropy-password-generator/blob/main/.github/ISSUE_TEMPLATE/bug_report.md">💡 Bug Report</a>
+            <a href="https://github.com/gerivanc/entropy-password-generator/blob/main/CONTRIBUTING.md">🤝 Contribute</a>
+        </div>
+
+        <!-- Final quote with floating box design -->
+        <div style="
+            background: rgba(0, 191, 255, 0.1);
+            border: 1px solid var(--neon-green);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+            backdrop-filter: blur(10px);
+        ">
+            <p style="
+                margin: 0;
+                color: var(--primary-color);
+                font-family: 'Orbitron', sans-serif;
+                font-size: 1.2em;
+                font-weight: 500;
+                text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            ">"Code with purpose. Build with passion. Share with the world."</p>
+        </div>
+
+        <!-- Copyright footer styles -->
+        <style>
+        .center p {
+            margin: 2px 0;
+            line-height: 1.2;
+            color: cyan;
+            transition: color 0.3s ease;
+        }
+        .center p:hover {
+            color: #00B7EB;
+        }
+        </style>
+
+        <!-- Copyright footer -->
+        <div class="center">          
+            <p><strong>Copyright © 2025 Gerivan Costa dos Santos</strong></p>
+            <p><strong>EntroPy Password Generator Web Version © 2025</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Binary rain animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const binaryRain = document.getElementById('binaryRain');
+            const digits = ['0', '1'];
+            const digitCount = 100;
+            
+            for (let i = 0; i < digitCount; i++) {
+                const digit = document.createElement('div');
+                digit.className = 'binary-digit';
+                digit.textContent = digits[Math.floor(Math.random() * digits.length)];
+                
+                // Random position
+                const left = Math.random() * 100;
+                digit.style.left = `${left}%`;
+                
+                // Random animation duration and delay
+                const duration = 10 + Math.random() * 20;
+                const delay = Math.random() * 5;
+                digit.style.animationDuration = `${duration}s`;
+                digit.style.animationDelay = `${delay}s`;
+                
+                // Random font size
+                const fontSize = 10 + Math.random() * 10;
+                digit.style.fontSize = `${fontSize}px`;
+                
+                // Random opacity
+                const opacity = 0.1 + Math.random() * 0.3;
+                digit.style.opacity = opacity;
+                
+                binaryRain.appendChild(digit);
+            }
+        });
+		
+		// 🔒 Sanitization and Safety Functions
+			function sanitizeHTML(input) {
+				if (typeof input !== 'string') return '';
+				
+				const div = document.createElement('div');
+				div.textContent = input;
+				return div.innerHTML;
+			}
+
+			function validatePasswordLength(length) {
+				const minLength = 15;
+				const maxLength = 128;
+				
+				if (length < minLength || length > maxLength) {
+					throw new Error(`Size must be between ${minLength} e ${maxLength} characters`);
+				}
+				return Math.floor(length);
+			}
+
+			function secureRandom(max) {
+				const randomBuffer = new Uint32Array(1);
+				window.crypto.getRandomValues(randomBuffer);
+				return randomBuffer[0] % max;
+			}
+    </script>
+</body>
+</html>
