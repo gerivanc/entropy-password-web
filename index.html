@@ -623,11 +623,11 @@
         </ol>
 
         <h2>📊 Example Output</h2>
-        <p><strong>Generated Password:</strong> <code class="mobile-optimized">Bxq>%;K|eCz#sLw`Y[3)(sLRH03viCVX2yb(.,RQ</code></p>
-        <p><strong>Length:</strong> 40 characters</p>
-        <p><strong>Ambiguous character:</strong> not chosen</p>
-        <p><strong>Entropy:</strong> 260.31 bits</p>
         <p><strong>Mode:</strong> Block III (Custom)</p>
+        <p><strong>Length:</strong> 52 characters</p>
+        <p><strong>Ambiguous character:</strong> not chosen</p>		
+        <p><strong>Generated Password:</strong> <code class="mobile-optimized">Af=KmL9KWV;y(7NgsbBtUh|NiKU\}0Bq5&IQ>FXtFw&?`U`_~E$`</code></p>
+        <p><strong>Entropy:</strong> 338.41 bits</p>
 
         <h3>Security Classification:</h3>
         <ul class="security-classification">
@@ -646,12 +646,11 @@ entropy-password-web/
 │   │   └── config.yml
 │   └── workflows/
 │       └── static.yml
-├── web/
-│   ├── entropy-password-generator.html
-│   └── readme.html
 ├── LICENSE
 ├── README.md
 └── SECURITY.md
+├── entropyweb.html (web password generator)
+└── index.html (home page of the entropy.gerivan.me subdomain) 
         </pre>
 
         <h3>🔗 Important Links</h3>
@@ -665,15 +664,22 @@ entropy-password-web/
         <h2>🎯 Recommended Use Cases</h2>
         <h3>For Daily Use:</h3>
         <ul>
-            <li><code>Mode 8</code> (151 bits) - High-security websites</li>
-            <li><code>Mode 15</code> (152 bits) - Corporate email</li>
-            <li><code>Mode 11</code> (95 bits) - Social media</li>
+			<li><code>🧩 Block I (All with ambiguous characters, length 24)</code>
+            <li><code>Mode 8</code> ( 152.16 bits) - High-security websites</li>
+            <li><code>Mode 11</code> (96.14 bits) - Social media</li>			
+            <li><code>Mode 15</code> (153.83 bits) - Corporate email</li>
+            <li><code>Mode 17</code> (269.19 bits) - Cloud Storage Services</li>
         </ul>
         <h3>For Maximum Security:</h3>
         <ul>
-            <li><code>Mode 19</code> (475 bits) - Password manager master key</li>
-            <li><code>Mode 20</code> (811 bits) - Encryption and wallets</li>
-            <li><code>Block III Custom</code> - Specific use cases</li>
+			<li><code>🌀 Block II (Mixed configurations)</code>		
+            <li><code>Mode 19</code> (480.70 bits) - Password manager master key</li>
+            <li><code>Mode 20</code> (820.40 bits) - Encryption and wallets</li>
+        <ul>
+		</ul>
+			<li><code>🎨 Block III (Using Custom Configuration)</code>			
+            <li><code>--length</code> - In specific use cases, if you deselect the option for ambiguous characters and select all other checkboxes, you will have a minimum entropy of 96.14 bits (for 15 characters) and a maximum of 833.00 bits (for 128 characters)</li>
+            <li><code>Cryptographic Key (128 chars, all types, with ambiguous)</code> (833.00 bits) - Encryption and wallets</li>			
         </ul>
 
         <h2>⚠️ Security Warnings</h2>
