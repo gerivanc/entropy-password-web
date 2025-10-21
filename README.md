@@ -26,7 +26,7 @@ Experience the EntroPy Password Generator directly in your browser! The web vers
 
 <div align="center">
   
-[**🌍 Try It Now on GitHub Pages**](https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html)
+[**🌍 Try It Now on GitHub Pages**](https://entropy.gerivan.me/entropyweb.html)
 
 </div>
 
@@ -34,7 +34,7 @@ Experience the EntroPy Password Generator directly in your browser! The web vers
 
 <div align="center">
 
-[**📚 Interactive Readme**](https://gerivanc.github.io/entropy-password-web/web/readme.html)
+[**📚 Interactive Readme**](https://entropy.gerivan.me)
 
 </div>
 
@@ -122,8 +122,9 @@ entropy-password-web/
 
 ### 🔗 Important Links
 
-- **🌐 Live Demo**: [Password Generator](https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html)
-- **📖 Interactive Docs**: [Complete Documentation](https://gerivanc.github.io/entropy-password-web/web/readme.html)
+- **🌐 Live Demo**: [Password Generator](https://entropy.gerivan.me/entropyweb.html)
+- **📖 Interactive Docs**: [Complete Documentation](https://entropy.gerivan.me)
+
 - **📁 Source Code**: [Web Repository](https://github.com/gerivanc/entropy-password-web)
 - **🐍 Python Original Project**: [Main Repository](https://github.com/gerivanc/entropy-password-generator)
 
@@ -131,9 +132,9 @@ entropy-password-web/
 
 ### 🌐 Web Pages Available
 
-- **🎯 Password Generator**: [Interactive Tool](https://gerivanc.github.io/entropy-password-web/web/entropy-password-generator.html)
-- **📖 Interactive Documentation**: [Complete Guide](https://gerivanc.github.io/entropy-password-web/web/readme.html)
+- **🎯 Password Generator**: [Interactive Tool](https://entropy.gerivan.me/entropyweb.html)
 
+- **📖 Interactive Documentation**: [Complete Guide](https://entropy.gerivan.me/entropyweb.html)
 ---
 
 ## 🎯 Recommended Use Cases
