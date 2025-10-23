@@ -1,0 +1,24 @@
+{
+  "name": "EntroPy Password Generator",
+  "short_name": "EntroPy PWD",
+  "description": "Secure password generator with entropy calculation",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a14",
+  "theme_color": "#00ffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://gerivan.me/g4.ico",
+      "sizes": "256x234",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "https://gerivan.me/g4.png",
+      "sizes": "893x816",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["security", "utilities"],
+  "lang": "en"
+}
