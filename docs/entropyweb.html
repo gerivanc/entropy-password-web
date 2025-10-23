@@ -1070,6 +1070,66 @@
             100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
         }
 
+        /* PWA Install Card */
+        .pwa-install-card {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(#00ff00), var(#00ff00));
+            color: #000;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+            z-index: 1000;
+            max-width: 320px;
+            font-family: 'Orbitron', sans-serif;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            border: 2px solid var(--neon-green);
+        }
+        
+        .pwa-install-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .pwa-install-card h3 {
+            color: #b6ffff;
+            margin-top: 0;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        
+        .pwa-install-card p {
+            color: #b6ffff;
+            margin: 15px 0;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        .pwa-install-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .pwa-install-buttons button {
+            flex: 1;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .install-btn {
+            background: linear-gradient(135deg, var( --neon-green-dark), #00ff00);
+            color: #000;
+        }
+        
+        .dismiss-btn {
+            background: linear-gradient(135deg, #ff4d4d, #004499);
+            color: #fff;
+        }
+
         /* Copyright footer styles */
         .center {
             text-align: center;
@@ -1556,6 +1616,16 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
             </div>
         </footer>
     </div> <!-- Closing the main container -->
+
+    <!-- PWA Install Card -->
+    <div class="pwa-install-card" id="pwa-install-card">
+        <h3>Install this PWA</h3>
+        <p>For a better experience!</p>
+        <div class="pwa-install-buttons">
+            <button class="install-btn" id="install-btn">Install Now</button>
+            <button class="dismiss-btn" id="dismiss-btn">Dismiss</button>
+        </div>
+    </div>
 
     <script>
         // DOM Elements
@@ -2076,7 +2146,65 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
                 return { level: 'strength-very-strong', label: 'Very Strong' };
             }
         }
-        
+ 
+            // PWA Install Card functionality
+            let deferredPrompt;
+            const pwaInstallCard = document.getElementById('pwa-install-card');
+            const installBtn = document.getElementById('install-btn');
+            const dismissBtn = document.getElementById('dismiss-btn');
+
+            // Security: Check if PWA is already installed
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                // PWA is already installed, hide the install card
+                pwaInstallCard.style.display = 'none';
+            } else {
+                // Show install card after a delay
+                setTimeout(() => {
+                    pwaInstallCard.classList.add('show');
+                }, 3000);
+            }
+
+            // Listen for beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Security: Prevent Chrome 67 and earlier from automatically showing the prompt
+                e.preventDefault();
+                // Stash the event so it can be triggered later
+                deferredPrompt = e;
+                
+                // Show install card
+                setTimeout(() => {
+                    pwaInstallCard.classList.add('show');
+                }, 3000);
+            });
+
+            // Install button click handler
+            installBtn.addEventListener('click', () => {
+                // Security: Hide the install card
+                pwaInstallCard.classList.remove('show');
+                
+                // Show the install prompt
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    
+                    // Wait for the user to respond to the prompt
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        } else {
+                            console.log('User dismissed the install prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    alert('Your browser does not support PWA installation or the install prompt is not available.');
+                }
+            });
+
+            // Dismiss button click handler
+            dismissBtn.addEventListener('click', () => {
+                pwaInstallCard.classList.remove('show');
+            });
+ 
         // Update entropy preview when length changes
         function updateEntropyPreview() {
             const uppercase = document.getElementById('uppercase').checked;
