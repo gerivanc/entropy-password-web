@@ -10,13 +10,6 @@
     <link rel="icon" type="image/png" sizes="893x816" href="https://gerivan.me/g4.png">
     <link rel="shortcut icon" href="https://gerivan.me/g4.ico">
     
-    <!-- === PWA Manifest === -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0a14">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="EntroPy Password Generator">
-    
     <!-- === 🔒 New: Content Security Policy === -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
@@ -1077,66 +1070,6 @@
             100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
         }
 
-        /* PWA Install Card */
-        .pwa-install-card {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, var(#00ff00), var(#00ff00));
-            color: #000;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
-            z-index: 1000;
-            max-width: 320px;
-            font-family: 'Orbitron', sans-serif;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.5s ease;
-            border: 2px solid var(--neon-green);
-        }
-        
-        .pwa-install-card.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .pwa-install-card h3 {
-            color: #b6ffff;
-            margin-top: 0;
-            font-size: 1.4rem;
-            text-align: center;
-        }
-        
-        .pwa-install-card p {
-            color: #b6ffff;
-            margin: 15px 0;
-            font-size: 1rem;
-            text-align: center;
-        }
-        
-        .pwa-install-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .pwa-install-buttons button {
-            flex: 1;
-            padding: 10px;
-            font-size: 0.9rem;
-        }
-        
-        .install-btn {
-            background: linear-gradient(135deg, var( --neon-green-dark), #00ff00);
-            color: #000;
-        }
-        
-        .dismiss-btn {
-            background: linear-gradient(135deg, #ff4d4d, #004499);
-            color: #fff;
-        }
-
         /* Copyright footer styles */
         .center {
             text-align: center;
@@ -1228,31 +1161,12 @@
             }
         }
         
-            /* PWA Install Card for larger screens */
-            .pwa-install-card {
-                max-width: 350px;
-            }
-        }
-        
         /* For mobile devices */
         @media (max-width: 767px) {
             .slider-value {
                 top: -35px;
                 font-size: 0.8rem;
                 padding: 4px 8px;
-            }
-
-            .pwa-install-card {
-                right: 10px;
-                left: 10px;
-                max-width: none;
-            }
-
-            .pwa-header-btn {
-                position: relative;
-                top: 0;
-                left: 0;
-                margin-bottom: 10px;
             }
         }
     </style>
@@ -1263,9 +1177,6 @@
             <div class="theme-toggle" id="theme-toggle">
                 <div class="toggle-slider"></div>
             </div>
-            <button class="pwa-header-btn" id="pwa-header-btn">
-                📱 Install App
-            </button>			
             <h1 class="glow">EntroPy Password Generator</h1>
             <p class="description">A secure and customizable password generator written in Python</p>
             <div class="badges">
@@ -1646,16 +1557,6 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         </footer>
     </div> <!-- Closing the main container -->
 
-    <!-- PWA Install Card -->
-    <div class="pwa-install-card" id="pwa-install-card">
-        <h3>📱 Install EntroPy PWA</h3>
-        <p>Install this app for offline access and better experience!</p>
-        <div class="pwa-install-buttons">
-            <button class="install-btn" id="install-btn">Install Now</button>
-            <button class="dismiss-btn" id="dismiss-btn">Dismiss</button>
-        </div>
-    </div>
-
     <script>
         // DOM Elements
         const modeBlocks = document.querySelectorAll('.mode-block');
@@ -1678,7 +1579,6 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         const warning = document.getElementById('warning');
         const errorMessage = document.getElementById('error-message');
         const themeToggle = document.getElementById('theme-toggle');
-        const pwaHeaderBtn = document.getElementById('pwa-header-btn');		
         
         // Character sets - Corresponds to the Python version of the entropy password generator
         const uppercaseChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // 23 chars 
@@ -1693,12 +1593,6 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         // Security variables
         let copyInitiatedByButton = false;
         let lastPassword = '';
-
-        // PWA Variables
-        let deferredPrompt;
-        const pwaInstallCard = document.getElementById('pwa-install-card');
-        const installBtn = document.getElementById('install-btn');
-        const dismissBtn = document.getElementById('dismiss-btn');
 
         // Function to show error messages
         function showError(message) {
@@ -1839,7 +1733,6 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         generateModeBtn.addEventListener('click', generatePredefinedPassword);
         copyBtn.addEventListener('click', copyPassword);
         themeToggle.addEventListener('click', toggleTheme);
-        pwaHeaderBtn.addEventListener('click', showPWAInstallCard);		
         
         // Copy protection - prevent malicious copy-paste
         document.addEventListener('copy', (e) => {
@@ -2183,91 +2076,7 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
                 return { level: 'strength-very-strong', label: 'Very Strong' };
             }
         }
- 
-        // === PWA FUNCTIONALITY ===
         
-        // Check if PWA is already installed
-        function isPWAInstalled() {
-            return window.matchMedia('(display-mode: standalone)').matches || 
-                   window.navigator.standalone === true;
-        }
-        
-        // Show PWA install card
-        function showPWAInstallCard() {
-            if (!isPWAInstalled() && deferredPrompt) {
-                pwaInstallCard.classList.add('show');
-            } else if (isPWAInstalled()) {
-                showError('PWA is already installed!');
-            } else {
-                showError('PWA installation not available in your browser');
-            }
-        }
-        
-        // Hide PWA install card
-        function hidePWAInstallCard() {
-            pwaInstallCard.classList.remove('show');
-        }
-        
-        // Listen for beforeinstallprompt event
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
-            e.preventDefault();
-            // Stash the event so it can be triggered later
-            deferredPrompt = e;
-            
-            // Update UI to notify the user they can install the PWA
-            console.log('PWA installation available');
-            
-            // Show install card after a delay if not already installed
-            if (!isPWAInstalled()) {
-                setTimeout(() => {
-                    pwaInstallCard.classList.add('show');
-                }, 5000);
-            }
-        });
-        
-        // Install button click handler
-        installBtn.addEventListener('click', () => {
-            hidePWAInstallCard();
-            
-            if (deferredPrompt) {
-                // Show the install prompt
-                deferredPrompt.prompt();
-                
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the PWA installation');
-                        showError('PWA installed successfully!');
-                    } else {
-                        console.log('User dismissed the PWA installation');
-                        showError('PWA installation cancelled');
-                    }
-                    deferredPrompt = null;
-                });
-            } else {
-                showError('PWA installation not available in your browser');
-            }
-        });
-        
-        // Dismiss button click handler
-        dismissBtn.addEventListener('click', hidePWAInstallCard);
-        
-        // Listen for app installed event
-        window.addEventListener('appinstalled', (evt) => {
-            console.log('PWA was installed');
-            deferredPrompt = null;
-            hidePWAInstallCard();
-        });
-        
-        // Check if PWA is already installed on load
-        if (isPWAInstalled()) {
-            console.log('PWA is already installed');
-            pwaHeaderBtn.textContent = '📱 Installed';
-            pwaHeaderBtn.style.opacity = '0.7';
-            pwaHeaderBtn.style.cursor = 'default';
-        }
- 
         // Update entropy preview when length changes
         function updateEntropyPreview() {
             const uppercase = document.getElementById('uppercase').checked;
