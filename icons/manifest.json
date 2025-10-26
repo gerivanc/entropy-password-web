@@ -10,7 +10,7 @@
     "categories": ["business", "productivity"],
     "icons": [
         {
-            "src": "icons/favicon2-944x910.png",
+            "src": "icons/favicon-784x757",
             "sizes": "944x910",
             "type": "image/png",
             "purpose": "maskable any"
@@ -21,8 +21,8 @@
             "type": "image/png"
         },
         {
-            "src": "icons/web-app-manifest-960x410.png",
-            "sizes": "128x128",
+            "src": "icons/apple-touch-icon-891x881",
+            "sizes": "891x881",
             "type": "image/png"
         },
     ]
