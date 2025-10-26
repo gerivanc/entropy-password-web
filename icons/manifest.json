@@ -10,18 +10,18 @@
     "categories": ["business", "productivity"],
     "icons": [
         {
-            "src": "/favicon2-944x910.png",
+            "src": "icons/favicon2-944x910.png",
             "sizes": "944x910",
             "type": "image/png",
             "purpose": "maskable any"
         },
         {
-            "src": "/web-app-manifest-871x874.png",
+            "src": "icons/web-app-manifest-871x874.png",
             "sizes": "871x874",
             "type": "image/png"
         },
         {
-            "src": "web-app-manifest-960x410.png",
+            "src": "icons/web-app-manifest-960x410.png",
             "sizes": "128x128",
             "type": "image/png"
         },
