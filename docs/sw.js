@@ -1,7 +1,7 @@
 const CACHE_NAME = 'Entropy Web';
 const urlsToCache = [
     '/',
-    '/docs/entropyweb.html',
+    '/entropyweb.html',
     '/styles.css',
     '/app.js',
     '/icons/apple-touch-icon-891x881.png',
