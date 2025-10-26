@@ -1,0 +1,33 @@
+{
+  "name": "EntroPy Password Generator project - Web Version",
+  "short_name": "EntroPy Web",
+  "description": "The web browser version of the EntroPy Password Generator, real-time, 100% secure and 100% interactive!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon2-944x910.png",
+      "sizes": "944x910",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon-891x881.png",
+      "sizes": "891x881",
+      "type": "image/png"
+    },
+    {
+      "src": "/web-app-manifest-871x874.png",
+      "sizes": "871x874",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-960x410.png",
+      "sizes": "960x410",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
