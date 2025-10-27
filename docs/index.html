@@ -2,30 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#00ffff">
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline'; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-                   font-src 'self' https://fonts.gstatic.com; 
-                   img-src 'self' data: https://*.githubusercontent.com https://img.shields.io https://komarev.com https://github-readme-activity-graph.vercel.app https://nirzak-streak-stats.vercel.app https://github-readme-stats.vercel.app https://github-profile-summary-cards.vercel.app https://vercel.app https://vercel.live;
-                   frame-src 'self' https://entropy.gerivan.me https://*.githubusercontent.com;">
-				   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="https://entropy.gerivan.me/web-app-manifest-871x874.png" sizes="871x874">
+	<link rel="icon" type="image/png" href="https://entropy.gerivan.me/favicon-392x379.png" sizes="392x379">
 	<link rel="icon" type="image/x-icon" href="https://entropy.gerivan.me/favicon.ico">
 	<link rel="shortcut icon" href="https://entropy.gerivan.me/favicon.ico">
-	<link rel="apple-touch-icon" sizes="891x881" href="entropy.gerivan.me/apple-touch-icon-891x881.png">
-	<link rel="manifest" href="https://entropy.gerivan.me/site.webmanifest">		
-	
-    <!-- Meta tags para PWA -->
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">
+	<link rel="apple-touch-icon" sizes="446x441" href="entropy.gerivan.me/apple-touch-icon-446x441">
+	<link rel="manifest" href="https://entropy.gerivan.me/site.webmanifest">	
+    
+    <!-- === 🔒 New: Content Security Policy === -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                   font-src 'self' https://fonts.gstatic.com;
+                   img-src 'self' https: data:;
+                   connect-src 'none';
+                   object-src 'none';
+                   base-uri 'self';">
+    
+    <!-- === Content Security Policy 2th === -->
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
     <title>EntroPy Password Generator Web Version</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
+	<style>
         :root {
             --primary-color: #00ffff;
             --secondary-color: #0080ff;
