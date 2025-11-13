@@ -1,6 +1,6 @@
-title: "EntroPy Password Generator - Web Version"
-description: "The web browser version of the EntroPy Password Generator, real-time, 100% secure and 100% interactive! "
-theme: jekyll-theme-minimal
+title: "EntroPy Password Generator - Web Version" 
+description: "The web browser version of the EntroPy Password Generator, real-time, 100% secure and 100% interactive! " 
+theme: jekyll-theme-minimal 
 include: [".nojekyll", "*.html", "*.md", "docs/"]
 exclude: ["README.md"]
 plugins:
