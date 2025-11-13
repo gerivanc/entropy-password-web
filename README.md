@@ -113,14 +113,41 @@ Mode: Block III (Custom)
 ---
 
 ## 🗂️ Web Project Structure
+
+```
 entropy-password-web/
-├── web/
-│ └── entropy-password-generator.html # 🎯 Main interface
-├── README.md # 📖 This file
-└── github-pages-config/ # ⚙️ GitHub Pages configuration
+├── .github/
+│   └── ISSUE_TEMPLATE
+│       └── config.yml
+│   └── workflows/
+│       └── static.yml
+│
+├── docs/
+│		├── .nojekyll
+│		├── CNAME
+│		├── _config.yml
+│		├── apple-touch-icon-256x247.png
+│		├── entropyweb.html
+│		├── CNAME
+│		├── favicon-256x256.png
+│		├── favicon-784x757.png
+│		├── favicon.ico
+│		├── favicon.svg
+│		├── favicon2-944x910.png
+│		├── favicon-784x757.png
+│		├── index.html
+│		├── site.webmanifest
+│		├── web-app-manifest-871x874.png
+│		└── web-app-manifest-960x410.png
+│
+├── LICENSE
+├── README.md
+└──  SECURITY.md
+```
 
+---
 
-### 🔗 Important Links
+## 🔗 Important Links
 
 - **🌐 Live Demo**: [Password Generator](https://entropy.gerivan.me/entropyweb.html)
 - **📖 Interactive Docs**: [Complete Documentation](https://entropy.gerivan.me)
