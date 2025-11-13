@@ -123,22 +123,21 @@ entropy-password-web/
 │       └── static.yml
 │
 ├── docs/
-│		├── .nojekyll
-│		├── CNAME
-│		├── _config.yml
-│		├── apple-touch-icon-256x247.png
-│		├── entropyweb.html
-│		├── CNAME
-│		├── favicon-256x256.png
-│		├── favicon-784x757.png
-│		├── favicon.ico
-│		├── favicon.svg
-│		├── favicon2-944x910.png
-│		├── favicon-784x757.png
-│		├── index.html
-│		├── site.webmanifest
-│		├── web-app-manifest-871x874.png
-│		└── web-app-manifest-960x410.png
+│	├── .nojekyll
+│	├── CNAME
+│	├── _config.yml
+│	├── apple-touch-icon-256x247.png
+│	├── entropyweb.html
+│	├── favicon-256x256.png
+│	├── favicon-784x757.png
+│	├── favicon.ico
+│	├── favicon.svg
+│	├── favicon2-944x910.png
+│	├── favicon2.ico
+│	├── index.html
+│	├── site.webmanifest
+│	├── web-app-manifest-871x874.png
+│	└── web-app-manifest-960x410.png
 │
 ├── LICENSE
 ├── README.md
