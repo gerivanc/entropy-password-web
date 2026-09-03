@@ -6,7 +6,7 @@ The following versions of the EntroPy Password Generator **Web Version** are cur
 
 | Version | Supported          | End-of-Life Date       |
 |---------|--------------------|------------------------|
-| Latest  | :white_check_mark: | TBD (Est. October 2026) |
+| Latest  | :white_check_mark: | TBD (Est. June 2027) |
 | Beta / Pre-release | :x:      | -                      |
 
 > **Note**: The Web Version is hosted on [GitHub Pages](https://gerivanc.github.io/entropy-password-web/web/readme.html). Always ensure you are using the latest deployed version.
