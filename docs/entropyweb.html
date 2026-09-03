@@ -5,20 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     
 	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="https://entropy.gerivan.me/favicon-256x256.png" sizes="256x256"> 
+	<link rel="icon" type="image/png" href="https://entropy.gerivan.me/favicon-256x256.png" sizes="256x256">
 	<link rel="icon" type="image/x-icon" href="https://entropy.gerivan.me/favicon.ico">
 	<link rel="shortcut icon" href="https://entropy.gerivan.me/favicon.ico">
-	<link rel="apple-touch-icon" sizes="256x247" href="entropy.gerivan.me/apple-touch-icon-256x247.png"> 
-	<link rel="manifest" href="https://entropy.gerivan.me/site.webmanifest"> 
+	<!-- Fix: missing "https://" scheme was making this a relative/invalid URL -->
+	<link rel="apple-touch-icon" sizes="256x247" href="https://entropy.gerivan.me/apple-touch-icon-256x247.png">
 
-	<!-- Manifest -->
-	<link rel="manifest" href="/site.webmanifest">  
-    
-    <!-- === 🔒 New: Content Security Policy === --> 
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+	<!-- Manifest (removed duplicate absolute-URL <link> that pointed to the same file) -->
+	<link rel="manifest" href="/site.webmanifest">
+
+    <!-- === 🔒 Content Security Policy ===
+         Note: some directives (frame-ancestors, sandbox, report-to/report-uri)
+         are ignored when CSP is delivered via <meta> and only take effect
+         through a real HTTP response header. GitHub Pages cannot set custom
+         headers, so those directives are intentionally left out here. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline';
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
                    font-src 'self' https://fonts.gstatic.com;
                    img-src 'self' https: data:;
                    connect-src 'none';
@@ -1534,27 +1538,7 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
                 ">"To ensure the security of your accounts, it is necessary to start with a strong password. Have you updated your passwords today?"</p>
             </div>
 
-            <!-- Copyright footer styles -->
-            <style>
-            .center {
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 2px;
-            }
-            .center p {
-                margin: 2px 0;
-                line-height: 1.2;
-                color: cyan;
-                transition: color 0.3s ease;
-            }
-            .center p:hover {
-                color: #00B7EB;
-            }
-            </style>
-
-            <!-- Copyright footer -->
+            <!-- Copyright footer (styles are defined once in the main <style> block above) -->
             <div class="center">          
                 <p><strong>Copyright © 2025 Gerivan Costa dos Santos</strong></p>
                 <p><strong>EntroPy Password Generator Web Version © 2025</strong></p>
@@ -1592,8 +1576,14 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         const lowercaseAmbiguous = 'abcdefghijklmnopqrstuvwxyz'; // 26 chars
         const numberChars = '23456789'; // 8 chars (removed 0, 1)
         const numberAmbiguous = '0123456789'; // 10 chars
-        const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?~`\\'; // 32 chars
-        const symbolAmbiguous = '!@#$%^&*()_+-=[]{}|;:,.<>?~`\\'; // 32 chars
+        // Bug fix: symbolChars was byte-for-byte identical to symbolAmbiguous, so enabling
+        // "Avoid ambiguous characters" never actually removed | and ` from the symbol set —
+        // breaking the checkbox's own label and diverging from the Python reference
+        // implementation's ambiguous_chars = "Il1O0|`" filter. Verified against this page's
+        // own modes table: with | and ` excluded, Mode 11 (pool=81, length=15) computes to
+        // exactly 95.10 bits as documented; with them included it does not.
+        const symbolChars = '!@#$%^&*()_+-=[]{};:,.<>?~\\'; // 27 chars (no ambiguous: excludes | and `)
+        const symbolAmbiguous = '!@#$%^&*()_+-=[]{}|;:,.<>?~`\\'; // 29 chars (full set, includes | and `)
         
         // Security variables
         let copyInitiatedByButton = false;
@@ -1801,21 +1791,25 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         });
         
         // Functions
+        // Note: this used to be defined twice in this file (an older setTimeout-based
+        // version followed immediately by this optimized one). Since JS keeps only the
+        // last function declaration for a given name, the first copy was fully dead code
+        // and has been removed.
         function generateCustomPassword() {
             // Validate inputs first
             if (!validateOptions()) {
                 return;
             }
-            
+
             const length = parseInt(lengthSlider.value);
             const uppercase = document.getElementById('uppercase').checked;
             const lowercase = document.getElementById('lowercase').checked;
             const numbers = document.getElementById('numbers').checked;
             const symbols = document.getElementById('symbols').checked;
             const avoidAmbiguous = document.getElementById('avoid-ambiguous').checked;
-            
+
             let charPool = '';
-            
+
             if (uppercase) {
                 charPool += avoidAmbiguous ? uppercaseChars : uppercaseAmbiguous;
             }
@@ -1828,70 +1822,24 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
             if (symbols) {
                 charPool += avoidAmbiguous ? symbolChars : symbolAmbiguous;
             }
-            
+
             // Show loading state
             showGeneratingFeedback();
-            
-            // Use setTimeout to allow UI to update before heavy computation
-            setTimeout(() => {
-                let password = '';
-                for (let i = 0; i < length; i++) {
-                    // Use cryptographically secure random
-                    const randomIndex = getCryptoRandom(charPool.length);
-                    password += charPool[randomIndex];
-                }
-                
-                const entropy = Math.log2(charPool.length) * length;
-                
-                displayPassword(password, length, entropy, 'Custom (Block III)');
-                hideGeneratingFeedback();
-            }, 10);
+
+            // No setTimeout needed: generating up to 128 characters is effectively
+            // instantaneous, so the synchronous loop below does not block the UI.
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                // Use cryptographically secure random selection
+                const randomIndex = getCryptoRandom(charPool.length);
+                password += charPool[randomIndex];
+            }
+
+            const entropy = Math.log2(charPool.length) * length;
+
+            displayPassword(password, length, entropy, 'Custom (Block III)');
+            hideGeneratingFeedback();
         }
-        
-			function generateCustomPassword() {
-			// Validate inputs first (turning point for code optimization in generating passwords quickly)
-			if (!validateOptions()) {
-				return;
-			}
-			
-			const length = parseInt(lengthSlider.value);
-			const uppercase = document.getElementById('uppercase').checked;
-			const lowercase = document.getElementById('lowercase').checked;
-			const numbers = document.getElementById('numbers').checked;
-			const symbols = document.getElementById('symbols').checked;
-			const avoidAmbiguous = document.getElementById('avoid-ambiguous').checked;
-			
-			let charPool = '';
-			
-			if (uppercase) {
-				charPool += avoidAmbiguous ? uppercaseChars : uppercaseAmbiguous;
-			}
-			if (lowercase) {
-				charPool += avoidAmbiguous ? lowercaseChars : lowercaseAmbiguous;
-			}
-			if (numbers) {
-				charPool += avoidAmbiguous ? numberChars : numberAmbiguous;
-			}
-			if (symbols) {
-				charPool += avoidAmbiguous ? symbolChars : symbolAmbiguous;
-			}
-			
-			// Show charging status
-			showGeneratingFeedback();
-			
-			// OPTIMIZED CODE: Removed unnecessary setTimeout
-			let password = '';
-			for (let i = 0; i < length; i++) {
-				// Use cryptographically secure rendering
-				const randomIndex = getCryptoRandom(charPool.length);
-				password += charPool[randomIndex];
-			}
-			
-			const entropy = Math.log2(charPool.length) * length;
-			
-			displayPassword(password, length, entropy, 'Custom (Block III)');
-			hideGeneratingFeedback();
-		}
 
 		function generatePredefinedPassword() {
 			const mode = parseInt(modeSelect.value);
@@ -2029,11 +1977,20 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
             localStorage.setItem('theme', newTheme);
         }
         
-        // Security: Use cryptographically secure random number generator
+        // Security: Use cryptographically secure random number generator.
+        // Rejection sampling avoids modulo bias: a plain "% max" skews low values
+        // whenever max does not evenly divide 2^32 (true for almost every charPool
+        // length here), which undermines the uniform character selection this
+        // project's entropy calculations assume.
         function getCryptoRandom(max) {
+            const range = Math.floor(0x100000000 / max) * max;
             const randomBuffer = new Uint32Array(1);
-            window.crypto.getRandomValues(randomBuffer);
-            return randomBuffer[0] % max;
+            let value;
+            do {
+                window.crypto.getRandomValues(randomBuffer);
+                value = randomBuffer[0];
+            } while (value >= range);
+            return value % max;
         }
         
         // Input validation
