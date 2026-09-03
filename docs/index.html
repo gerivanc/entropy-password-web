@@ -8,19 +8,29 @@
 	<link rel="icon" type="image/png" href="https://entropy.gerivan.me/favicon-256x256.png" sizes="256x256">
 	<link rel="icon" type="image/x-icon" href="https://entropy.gerivan.me/favicon.ico">
 	<link rel="shortcut icon" href="https://entropy.gerivan.me/favicon.ico">
-	<link rel="apple-touch-icon" sizes="256x247" href="entropy.gerivan.me/apple-touch-icon-256x247.png">
-	<link rel="manifest" href="https://entropy.gerivan.me/site.webmanifest">
+	<!-- Fix: missing "https://" scheme was making this a relative/invalid URL -->
+	<link rel="apple-touch-icon" sizes="256x247" href="https://entropy.gerivan.me/apple-touch-icon-256x247.png">
 
-	<!-- Manifest -->
+	<!-- Manifest (removed duplicate absolute-URL <link> that pointed to the same file) -->
 	<link rel="manifest" href="/site.webmanifest">
-    
-    <!-- === 🔒 New: Content Security Policy === -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+
+    <!-- === 🔒 Content Security Policy ===
+         Note: some directives (frame-ancestors, sandbox, report-to/report-uri)
+         are ignored when CSP is delivered via <meta> and only take effect
+         through a real HTTP response header. GitHub Pages cannot set custom
+         headers, so those directives are intentionally left out here.
+         frame-src is set explicitly (rather than left to inherit from
+         default-src 'self') so the demo <iframe> below can still load
+         entropyweb.html when this page is previewed from a different origin
+         (file://, localhost, a github.io preview) than the production
+         entropy.gerivan.me domain. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline';
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
                    font-src 'self' https://fonts.gstatic.com;
                    img-src 'self' https: data:;
+                   frame-src 'self' https://entropy.gerivan.me;
                    connect-src 'none';
                    object-src 'none';
                    base-uri 'self';">
@@ -309,7 +319,19 @@
             box-shadow: 0 6px 14px rgba(0, 191, 255, 0.6);
             transform: translateY(-2px);
         }
-        
+
+        /* Copyright footer text */
+        .center p {
+            margin: 2px 0;
+            line-height: 1.2;
+            color: cyan;
+            transition: color 0.3s ease;
+        }
+
+        .center p:hover {
+            color: #00B7EB;
+        }
+
         /* Lists with icons */
         ul li::marker {
             color: var(--primary-color);
@@ -522,9 +544,8 @@
     <div class="binary-rain" id="binaryRain"></div>
     
     <div class="container">
-        <h1 class="glow">EntroPy Password Generator Web Version</h1>        
-        </div>
-    <div class="container">
+        <h1 class="glow">EntroPy Password Generator Web Version</h1>
+
         <div class="intro-text">
             <p>This EntroPy Password Generator project - Web Version, derives from the original project <a href="https://github.com/gerivanc/entropy-password-generator/">EntroPy Password Generator</a>, is a secure and customizable password generator developed in Python, enabling users to generate strong passwords. It creates robust passwords with configurable character sets and calculates their entropy to evaluate strength. The project provides 20+ modes for secure password generation, ranging from 15 to 128 characters, with entropies between 97.62 bits and 833.00 bits, exceeding the Proton© recommended minimum of 75 bits and the cryptographic strength best practices outlined in NIST SP 800-63B and NIST SP 800-132.</p>
         </div>
@@ -667,22 +688,22 @@ entropy-password-web/
         <h2>🎯 Recommended Use Cases</h2>
         <h3>For Daily Use:</h3>
         <ul>
-			<li><code>🧩 Block I (All with ambiguous characters, length 24)</code>
+            <li><code>🧩 Block I (All with ambiguous characters, length 24)</code></li>
             <li><code>Mode 8</code> ( 152.16 bits) - High-security websites</li>
-            <li><code>Mode 11</code> (96.14 bits) - Social media</li>			
+            <li><code>Mode 11</code> (96.14 bits) - Social media</li>
             <li><code>Mode 15</code> (153.83 bits) - Corporate email</li>
             <li><code>Mode 17</code> (269.19 bits) - Cloud Storage Services</li>
         </ul>
         <h3>For Maximum Security:</h3>
         <ul>
-			<li><code>🌀 Block II (Mixed configurations)</code>		
+            <li><code>🌀 Block II (Mixed configurations)</code></li>
             <li><code>Mode 19</code> (480.70 bits) - Password manager master key</li>
             <li><code>Mode 20</code> (820.40 bits) - Encryption and wallets</li>
+        </ul>
         <ul>
-		</ul>
-			<li><code>🎨 Block III (Using Custom Configuration)</code>			
+            <li><code>🎨 Block III (Using Custom Configuration)</code></li>
             <li><code>--length</code> - In specific use cases, if you deselect the option for ambiguous characters and select all other checkboxes, you will have a minimum entropy of 96.14 bits (for 15 characters) and a maximum of 833.00 bits (for 128 characters)</li>
-            <li><code>Cryptographic Key (128 chars, all types, with ambiguous)</code> (833.00 bits) - Encryption and wallets</li>			
+            <li><code>Cryptographic Key (128 chars, all types, with ambiguous)</code> (833.00 bits) - Encryption and wallets</li>
         </ul>
 
         <h2>⚠️ Security Warnings</h2>
@@ -768,23 +789,10 @@ entropy-password-web/
             ">"To ensure the security of your accounts, it is necessary to start with a strong password. Have you updated your passwords today?"</p>
         </div>
 
-        <!-- Copyright footer styles -->
-        <style>
-        .center p {
-            margin: 2px 0;
-            line-height: 1.2;
-            color: cyan;
-            transition: color 0.3s ease;
-        }
-        .center p:hover {
-            color: #00B7EB;
-        }
-        </style>
-
         <!-- Copyright footer -->
         <div class="center">          
-            <p><strong>Copyright © 2025 Gerivan Costa dos Santos</strong></p>
-            <p><strong>EntroPy Password Generator Web Version © 2025</strong></p>
+            <p><strong>Copyright © 2025-2026 Gerivan Costa dos Santos</strong></p>
+            <p><strong>EntroPy Password Generator Web Version © 2025-2026</strong></p>
         </div>
     </div>
 
@@ -823,6 +831,8 @@ entropy-password-web/
         });
 		
 		// 🔒 Sanitization and Safety Functions
+		// Note: not currently called from this landing page (docs/index.html) — the
+		// live generator logic lives in entropyweb.html. Kept here for reuse/reference.
 			function sanitizeHTML(input) {
 				if (typeof input !== 'string') return '';
 				
@@ -836,15 +846,23 @@ entropy-password-web/
 				const maxLength = 128;
 				
 				if (length < minLength || length > maxLength) {
-					throw new Error(`Size must be between ${minLength} e ${maxLength} characters`);
+					throw new Error(`Size must be between ${minLength} and ${maxLength} characters`);
 				}
 				return Math.floor(length);
 			}
 
 			function secureRandom(max) {
+				// Rejection sampling avoids modulo bias: a plain "% max" skews low
+				// values whenever max does not evenly divide 2^32, which is exactly
+				// the kind of non-uniformity a cryptographic RNG should not have.
+				const range = Math.floor(0x100000000 / max) * max;
 				const randomBuffer = new Uint32Array(1);
-				window.crypto.getRandomValues(randomBuffer);
-				return randomBuffer[0] % max;
+				let value;
+				do {
+					window.crypto.getRandomValues(randomBuffer);
+					value = randomBuffer[0];
+				} while (value >= range);
+				return value % max;
 			}
     </script>
 </body>
