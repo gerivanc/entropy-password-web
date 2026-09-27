@@ -14,6 +14,33 @@
 	<!-- Manifest (removed duplicate absolute-URL <link> that pointed to the same file) -->
 	<link rel="manifest" href="/site.webmanifest">
 
+	<!-- === 📲 PWA metadata ===
+	     theme-color tints the browser UI / installed app title bar.
+	     The apple-* and mobile-web-app-* tags let iOS/iPadOS Safari launch
+	     the site in standalone mode after "Add to Home Screen", since Safari
+	     does not read every field of the web app manifest. -->
+	<meta name="theme-color" content="#0a0a14" media="(prefers-color-scheme: dark)">
+	<meta name="theme-color" content="#0066cc" media="(prefers-color-scheme: light)">
+	<meta name="application-name" content="EntroPy Web">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="EntroPy Web">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<!-- Capture the install prompt as early as possible: Chromium browsers can
+	     fire "beforeinstallprompt" before the end-of-body scripts have run,
+	     and a missed event cannot be re-requested until the next page load. -->
+	<script>
+	    window.__pwaDeferredPrompt = null;
+	    window.addEventListener('beforeinstallprompt', (event) => {
+	        // Stop the browser's default mini-infobar; our bilingual banner replaces it
+	        event.preventDefault();
+	        window.__pwaDeferredPrompt = event;
+	        // Notify the banner script (it may already be listening)
+	        window.dispatchEvent(new Event('pwa:installable'));
+	    });
+	</script>
+
     <!-- === 🔒 Content Security Policy ===
          Note: some directives (frame-ancestors, sandbox, report-to/report-uri)
          are ignored when CSP is delivered via <meta> and only take effect
@@ -26,6 +53,8 @@
                    font-src 'self' https://fonts.gstatic.com;
                    img-src 'self' https: data:;
                    connect-src 'none';
+                   manifest-src 'self';
+                   worker-src 'self';
                    object-src 'none';
                    base-uri 'self';">
     
@@ -1096,6 +1125,124 @@
             color: #00B7EB;
         }
         
+        /* === 📲 PWA install banner (bilingual EN / PT-BR) === */
+        .pwa-banner {
+            position: fixed;
+            left: 50%;
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            transform: translate(-50%, 150%);
+            width: calc(100% - 32px);
+            max-width: 520px;
+            z-index: 1000;
+            background: var(--darker-bg);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.35);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .pwa-banner.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+
+        .pwa-banner[hidden] {
+            display: none;
+        }
+
+        .pwa-banner-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .pwa-banner-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .pwa-banner-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .pwa-banner-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .pwa-banner-text p + p {
+            margin-top: 4px;
+        }
+
+        /* Language tag shown before each line so both translations stay readable */
+        .pwa-lang {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 5px;
+            margin-right: 5px;
+            border-radius: 4px;
+            border: 1px solid var(--card-border);
+            color: var(--primary-color);
+            vertical-align: middle;
+        }
+
+        .pwa-banner-steps {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: rgba(0, 100, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+            font-size: 0.85rem;
+        }
+
+        .pwa-banner-steps[hidden] {
+            display: none;
+        }
+
+        .pwa-banner-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .pwa-banner-actions button {
+            padding: 10px 14px;
+            font-size: 0.9rem;
+        }
+
+        .pwa-install-btn {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: var(--darker-bg);
+        }
+
+        .pwa-install-btn[hidden] {
+            display: none;
+        }
+
+        .pwa-dismiss-btn {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--card-border);
+            box-shadow: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .pwa-banner {
+                transition: none;
+            }
+        }
+
         /* Media queries for larger screens */
         @media (min-width: 768px) {
             body {
@@ -2073,6 +2220,216 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         window.addEventListener('load', () => {
             generateCustomPassword();
         });
+    </script>
+
+    <!-- === 📲 PWA install banner (bilingual EN / PT-BR) ===
+         Hidden by default; the script below decides whether to show it with
+         a native "Install" button (Chromium) or manual steps (Safari/Firefox). -->
+    <div class="pwa-banner" id="pwa-banner" role="dialog" aria-live="polite"
+         aria-labelledby="pwa-banner-title" hidden>
+        <div class="pwa-banner-header">
+            <img class="pwa-banner-icon" src="https://entropy.gerivan.me/favicon-256x256.png" alt="" width="48" height="48">
+            <div>
+                <div class="pwa-banner-title" id="pwa-banner-title">
+                    Install EntroPy Web? / Instalar o EntroPy Web?
+                </div>
+                <div class="pwa-banner-text">
+                    <p><span class="pwa-lang">EN</span>Do you want to install this app on your device? Quick access from your home screen or desktop, even offline.</p>
+                    <p><span class="pwa-lang">PT</span>Deseja instalar este aplicativo no seu dispositivo? Acesso rápido pela tela inicial ou área de trabalho, mesmo offline.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual instructions for browsers without a programmatic install prompt -->
+        <div class="pwa-banner-steps" id="pwa-banner-steps" hidden></div>
+
+        <div class="pwa-banner-actions">
+            <button type="button" class="pwa-install-btn" id="pwa-install-btn" hidden>Install / Instalar</button>
+            <button type="button" class="pwa-dismiss-btn" id="pwa-dismiss-btn">Not now / Agora não</button>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        // PWA: service worker registration + bilingual install banner
+        // ================================================================
+        (() => {
+            'use strict';
+
+            const DISMISS_KEY = 'pwa-install-dismissed-at';
+            const DISMISS_DAYS = 7;          // Ask again after one week
+            const SHOW_DELAY_MS = 2500;      // Let the user see the page first
+
+            const banner = document.getElementById('pwa-banner');
+            const installBtn = document.getElementById('pwa-install-btn');
+            const dismissBtn = document.getElementById('pwa-dismiss-btn');
+            const stepsBox = document.getElementById('pwa-banner-steps');
+
+            // ---------- Service worker registration ----------
+            // Service workers only run in secure contexts (HTTPS or localhost).
+            if ('serviceWorker' in navigator && window.isSecureContext) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                        .catch((err) => console.warn('Service worker registration failed:', err));
+                });
+            }
+
+            // ---------- Environment detection ----------
+            const ua = navigator.userAgent;
+
+            // True when the page is already running as an installed app
+            function isStandalone() {
+                return window.matchMedia('(display-mode: standalone)').matches ||
+                       window.matchMedia('(display-mode: window-controls-overlay)').matches ||
+                       window.navigator.standalone === true; // iOS Safari
+            }
+
+            // iPadOS 13+ reports itself as "Macintosh", so touch support is checked too
+            const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+                          (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+            const isFirefox = /Firefox|FxiOS/i.test(ua);
+            const isAndroid = /Android/i.test(ua);
+            const isChromium = /Chrome|Chromium|CriOS|Edg|OPR|SamsungBrowser/i.test(ua);
+            const isMacSafari = /Macintosh/.test(ua) && /Safari/.test(ua) &&
+                                !isChromium && !isFirefox && !isIOS;
+
+            // ---------- Dismissal memory (per viewer, best effort) ----------
+            // Storage can be blocked (private mode, strict settings), so every
+            // access is wrapped and the banner still works without it.
+            function wasRecentlyDismissed() {
+                try {
+                    const ts = parseInt(localStorage.getItem(DISMISS_KEY), 10);
+                    return !Number.isNaN(ts) &&
+                           (Date.now() - ts) < DISMISS_DAYS * 24 * 60 * 60 * 1000;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            function rememberDismissal() {
+                try {
+                    localStorage.setItem(DISMISS_KEY, String(Date.now()));
+                } catch (e) {
+                    /* Storage unavailable: the banner will simply reappear next visit */
+                }
+            }
+
+            // ---------- Banner show / hide ----------
+            function showBanner() {
+                if (isStandalone() || wasRecentlyDismissed()) return;
+                banner.hidden = false;
+                // Next frame so the CSS transition actually runs
+                requestAnimationFrame(() => banner.classList.add('show'));
+            }
+
+            function hideBanner() {
+                banner.classList.remove('show');
+                setTimeout(() => { banner.hidden = true; }, 400);
+            }
+
+            // Builds a bilingual instruction block using textContent only (no innerHTML)
+            function setManualSteps(en, pt) {
+                stepsBox.textContent = '';
+                [['EN', en], ['PT', pt]].forEach(([lang, text], i) => {
+                    const p = document.createElement('p');
+                    if (i > 0) p.style.marginTop = '4px';
+                    const tag = document.createElement('span');
+                    tag.className = 'pwa-lang';
+                    tag.textContent = lang;
+                    p.appendChild(tag);
+                    p.appendChild(document.createTextNode(text));
+                    stepsBox.appendChild(p);
+                });
+                stepsBox.hidden = false;
+            }
+
+            // ---------- Path 1: Chromium (Chrome, Edge, Opera, Samsung Internet) ----------
+            // These browsers expose "beforeinstallprompt", captured early in <head>.
+            function onInstallable() {
+                if (!window.__pwaDeferredPrompt) return;
+                installBtn.hidden = false;
+                stepsBox.hidden = true;
+                setTimeout(showBanner, SHOW_DELAY_MS);
+            }
+
+            window.addEventListener('pwa:installable', onInstallable);
+            if (window.__pwaDeferredPrompt) onInstallable(); // Event fired before this script ran
+
+            installBtn.addEventListener('click', async () => {
+                const promptEvent = window.__pwaDeferredPrompt;
+                if (!promptEvent) return;
+                hideBanner();
+                promptEvent.prompt();
+                try {
+                    const { outcome } = await promptEvent.userChoice;
+                    if (outcome === 'dismissed') rememberDismissal();
+                } catch (e) {
+                    /* Ignore: prompt was closed unexpectedly */
+                }
+                // A prompt event can only be used once
+                window.__pwaDeferredPrompt = null;
+            });
+
+            // ---------- Path 2: browsers without a programmatic prompt ----------
+            // Show short manual instructions instead of an "Install" button.
+            function offerManualInstall() {
+                if (window.__pwaDeferredPrompt || isStandalone()) return;
+
+                if (isIOS) {
+                    setManualSteps(
+                        'Tap the Share button (square with an arrow), then "Add to Home Screen".',
+                        'Toque no botão Compartilhar (quadrado com seta) e depois em "Adicionar à Tela de Início".'
+                    );
+                } else if (isMacSafari) {
+                    setManualSteps(
+                        'In the menu bar, choose File → "Add to Dock".',
+                        'Na barra de menus, escolha Arquivo → "Adicionar ao Dock".'
+                    );
+                } else if (isFirefox && isAndroid) {
+                    setManualSteps(
+                        'Open the menu (⋮) and tap "Install" or "Add to Home screen".',
+                        'Abra o menu (⋮) e toque em "Instalar" ou "Adicionar à tela inicial".'
+                    );
+                } else if (isFirefox) {
+                    setManualSteps(
+                        'Look for an install icon in the address bar. If there is none, open this page in Chrome or Edge to install it.',
+                        'Procure um ícone de instalação na barra de endereços. Se não houver, abra esta página no Chrome ou no Edge para instalar.'
+                    );
+                } else {
+                    // Chromium that has not fired the event (already installed or
+                    // install criteria not met yet): stay silent.
+                    return;
+                }
+
+                installBtn.hidden = true;
+                showBanner();
+            }
+
+            // Wait a bit longer than the Chromium path so a late
+            // "beforeinstallprompt" still wins over the manual instructions.
+            window.addEventListener('load', () => setTimeout(offerManualInstall, SHOW_DELAY_MS + 1500));
+
+            // ---------- Common handlers ----------
+            dismissBtn.addEventListener('click', () => {
+                rememberDismissal();
+                hideBanner();
+            });
+
+            // Close with the Escape key for keyboard users
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !banner.hidden) {
+                    rememberDismissal();
+                    hideBanner();
+                }
+            });
+
+            // Fired by the browser once the app has actually been installed
+            window.addEventListener('appinstalled', () => {
+                window.__pwaDeferredPrompt = null;
+                hideBanner();
+                console.info('EntroPy Web installed successfully.');
+            });
+        })();
     </script>
 </body>
 </html>
