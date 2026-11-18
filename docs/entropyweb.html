@@ -1863,13 +1863,23 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
             };
         }
         
-        lengthSlider.addEventListener('input', debounce(() => {
-            updateSlider();
-            // Update entropy preview if password exists
+        // Bug fix (72 → 73 characters): the slider label used to be updated inside a
+        // 150 ms debounce, while generation reads lengthSlider.value directly. Nudging
+        // the slider from 72 to 73 and clicking "Generate" within 150 ms showed "72"
+        // on screen but produced a 73-character password. The visible value is now
+        // updated immediately on every input event; only the entropy preview stays
+        // debounced.
+        const debouncedEntropyPreview = debounce(() => {
             if (lastPassword) {
                 updateEntropyPreview();
             }
-        }, 150));
+        }, 150);
+
+        lengthSlider.addEventListener('input', () => {
+            updateSlider();
+            debouncedEntropyPreview();
+        });
+        lengthSlider.addEventListener('change', updateSlider);
         
         generateCustomBtn.addEventListener('click', generateCustomPassword);
         generateModeBtn.addEventListener('click', generatePredefinedPassword);
@@ -1877,8 +1887,23 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
         themeToggle.addEventListener('click', toggleTheme);
         
         // Copy protection - prevent malicious copy-paste
+        // Bug fix: the old check (e.target.id === 'password-content') almost never
+        // matched, because the copy event target is usually <body> or a text node's
+        // ancestor. Manual selection (e.g. triple-click) therefore copied the block's
+        // trailing line break, so the pasted password had 73 characters instead of 72.
+        // We now detect any selection touching the password box via the Selection API.
+        function selectionTouchesPassword() {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0) return false;
+            const container = document.getElementById('password-display');
+            for (let i = 0; i < sel.rangeCount; i++) {
+                if (sel.getRangeAt(i).intersectsNode(container)) return true;
+            }
+            return false;
+        }
+
         document.addEventListener('copy', (e) => {
-            if (e.target.id === 'password-content') {
+            if (selectionTouchesPassword()) {
                 // Only allow copying when initiated by the copy button
                 if (!copyInitiatedByButton) {
                     e.preventDefault();
@@ -1973,13 +1998,13 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
             // Show loading state
             showGeneratingFeedback();
 
-            // No setTimeout needed: generating up to 128 characters is effectively
-            // instantaneous, so the synchronous loop below does not block the UI.
-            let password = '';
-            for (let i = 0; i < length; i++) {
-                // Use cryptographically secure random selection
-                const randomIndex = getCryptoRandom(charPool.length);
-                password += charPool[randomIndex];
+            // Keep the on-screen value in sync with the length actually used
+            updateSlider();
+
+            const password = buildPassword(charPool, length);
+            if (password === null) {
+                hideGeneratingFeedback();
+                return;
             }
 
             const entropy = Math.log2(charPool.length) * length;
@@ -2078,14 +2103,12 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
 			// Show charging status
 			showGeneratingFeedback();
 			
-			// OPTIMIZED CODE: Removed unnecessary setTimeout
-			let password = '';
-			for (let i = 0; i < length; i++) {
-				// Use cryptographically secure randomization
-				const randomIndex = getCryptoRandom(charPool.length);
-				password += charPool[randomIndex];
+			const password = buildPassword(charPool, length);
+			if (password === null) {
+				hideGeneratingFeedback();
+				return;
 			}
-			
+
 			const entropy = Math.log2(charPool.length) * length;
 			const block = mode <= 10 ? 'I' : 'II';
 			
@@ -2093,8 +2116,26 @@ print(f"Entropy: {entropy:.2f} bits")</code></pre>
 			hideGeneratingFeedback();
 		}
         
+        // Builds a password of exactly `length` characters from `charPool` using
+        // the CSPRNG. Returns null (and shows an error) if the invariant
+        // password.length === length is ever violated.
+        function buildPassword(charPool, length) {
+            const pool = Array.from(charPool); // one array item per character
+            const chars = new Array(length);
+            for (let i = 0; i < length; i++) {
+                chars[i] = pool[getCryptoRandom(pool.length)];
+            }
+            const password = chars.join('');
+            if (password.length !== length) {
+                showError(`Internal error: expected ${length} characters, got ${password.length}. Please try again.`);
+                return null;
+            }
+            return password;
+        }
+
         function copyPassword() {
-            const password = passwordDisplay.textContent;
+            // Copy the exact generated string (no surrounding whitespace / line breaks)
+            const password = passwordDisplay.textContent.trim();
             if (password && password !== 'Your password will appear here') {
                 // Set flag to allow copying
                 copyInitiatedByButton = true;
